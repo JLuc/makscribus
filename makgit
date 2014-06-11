@@ -1,0 +1,140 @@
+#!/bin/sh
+
+# 0) installation du repo : se mettre dans ~/dev/scribus puis :
+# git clone git://git.scribus.net/scribus.git git
+
+# 1) pour créer la branche localement
+# git checkout --track -b $1 origin/$1
+# ou simplement
+# git checkout $1
+
+if [ ! -d "git" ]; then
+	echo 
+	echo "Mauvais départ. Il faut se situer dans le dossier parent de 'git'. On va dans ~/dev/scribus."
+	echo
+	cd ~/dev/scribus
+	if [ ! -d "git" ]; then
+		exit
+	fi
+fi
+
+cd git
+
+if test $1 = -h
+then
+	echo "usage : "
+	echo "mak [-h] [-log] [[-f] [-d] <branch> [rac]] : compile la branche branch et crée une commande raccourcie 'scribusrac' (sinon, accessible par scribusbranch)"
+	echo "<branch> : nom de la branche"
+	echo "<rac> : racourci vers l'exécutable. Si absent ce sera scribus<branch>"
+	echo "-h : affiche cette aide"
+	echo "-log : joli log de la branche courante"
+	echo "-f : force l'écrasement des modifications locales, par la version en ligne"
+	echo "-nomaj" : pas de mise à jour svn
+	echo "-d : efface d'abord les bin et objs préallables. Ce doit être la dernière option, juste avant le nom de la branche."
+	exit
+fi
+
+if test $1 = -log # un 2eme arg contient éventuellement une option comme -p
+then 
+	git log --graph --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset' --abbrev-commit -5 $2
+	exit
+fi
+
+if test $1 = -f
+then 
+	options=-f
+	echo
+	echo On va écraser tous les changements locaux, si jamais yen a !
+	echo
+	shift
+fi
+
+if test $1 = -d
+then
+	if test -z $2
+		then echo "Erreur : avec l'option -d il faut le nom de la branche en paramètre + eventuellement le suffixe du raccourci (pas recommandé)"
+		exit
+	fi
+	echo
+	echo "OK on efface les objets précédents."
+	echo
+	sudo rm -rf ~/bin/scribus$2 
+	sudo rm -rf ~/dev/scribus/build/build$2
+	echo
+	echo === Vérif 
+	echo ~/bin/scribus$2 a été vidé et contient :
+	ls ~/bin/scribus$2
+	echo 
+	echo ~/dev/scribus/build/build$2 a été vidé et contient :
+	ls ~/dev/scribus/build/
+	echo
+	echo Fin des vérifs ===
+	echo
+	shift
+fi
+
+if test -z $1
+	then echo "Erreur : il faut au moins le nom de la branche en paramètre + eventuellement le suffixe du raccourci (pas recommandé)"
+	exit
+fi
+
+echo
+
+if  [ "$1" = "nomaj" ]
+then
+	nomaj="oui"
+	echo "Pas de mise à jour"
+	shift
+else
+	nomaj="maj normale"
+fi
+
+if test -z $2
+	then rac=$1
+	else rac=$2
+fi
+
+echo branche : $1
+echo raccourci : scribus$rac
+echo options du checkout : $options
+echo
+
+if  [ ! "$nomaj" = "oui" ]
+then
+	echo
+	echo "Passage à branche $1 et récupération des mises à jour, par checkout + pull"
+	git checkout $options $1
+	git pull
+	echo
+fi
+
+# résultats exécutables
+mkdir ~/bin/scribus$1
+
+
+#on est dans le "git"
+mkdir ../build
+cd ../build
+mkdir build$rac
+cd build$rac
+echo On se déplace :
+pwd
+echo
+echo CMAKE ===============================
+echo
+#-DWANT_SCRIPTER2=1
+cmake -DCMAKE_INSTALL_PREFIX:PATH=~/bin/scribus$1 -DWANT_DEBUG=1  -DWANT_GUI_LANG="fr" -DWANT_SYSTEM_CAIRO=1  -DQT_PREFIX=/home/jluc/Qt5.2.1/5.2.1/gcc_64 -DWANT_HUNSPELL=1 ../../git/Scribus
+
+echo
+echo MAKE ================================
+echo
+make -j8
+echo
+echo MAKE INSTALL ========================
+echo
+sudo make install -j8
+sudo ln -s ~/bin/scribus$1/bin/scribus /usr/bin/scribus$rac
+echo
+echo RETOUR ==============================
+cd ../..
+pwd
