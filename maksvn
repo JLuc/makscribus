@@ -1,0 +1,164 @@
+#!/bin/sh
+
+# maksvn script
+# creates folders and has options
+
+# initialize folder with svn first
+# svn co svn://scribus.net/trunk/Scribus svn
+
+qtpath="/home/jluc/dev/Qt/Qt5.3/5.3"
+qtfullpath=$qtpath/gcc_64
+
+#Si on veut compiler une version particulière
+# revision=-r18800
+
+echo ================================
+
+if [ ! -d "svn" ]; 
+then
+	echo
+	echo "Mauvais départ : il faut se situer dans le dossier parent de 'svn'. Hop, allons vers ~/dev/scribus"
+	echo
+	cd ~/dev/scribus
+fi
+
+if [ ! -d "svn" ]; 
+then
+	exit
+fi
+
+cd svn
+
+
+if [ "$1" = "-?" ] || [ "$1" = "?" ] || [ "$1" = "-h" ] || [ "$1" = "h" ] || [ "$1" = "help" ] || [ "$1" = "-help" ]
+    then 	help="-h"
+fi
+
+# if test "$1" = "-?";
+# then 
+#	help="-h"  
+# fi
+# if test "$1" = "-h";  
+# then 
+# 	help="-h"  
+# fi
+
+if test "$help" = "-h";
+then
+	echo
+	echo "usage : maksvn [-h]ou[-?] [-d]ou[clean] [-nomaj] [diff [dest]]"
+	echo "met à jour le source svn de la 1.5 et compile"
+	echo 
+	echo === OPTIONS ====================
+	echo "-h ou -? : affiche cette aide"
+	echo "-d ou clean : efface d'abord les bin et objs déjà là"
+	echo "-nomaj" : pas de mise à jour svn
+	echo "diff : crée le fichier de diff dans dest.diff (ou svnhead.diff sinon)"
+	echo === INFOS ======================
+	svn info
+	exit
+fi
+
+rac=15svn
+
+if [ "$1" = "diff" ] || [ "$1" = "-diff" ]
+then
+	if test "$2" = ""  
+	then
+		dest="svnhead.diff" 
+	else dest="${2%.diff}.diff"
+	fi
+	echo ok on va mettre le diff dans $dest
+	$destroot=$dest
+	$dest="../$dest"
+
+	if [ -f  $dest ]; 
+	then
+		echo "Effacement de $dest" 
+		rm $dest
+	fi
+	svn diff -x -u -x -w -x -b > $dest
+	if [ -f $dest ]; 
+	then
+		cat $dest
+		echo "===="
+		echo "Le diff a été mis dans $destroot"
+		geany $dest
+	else
+		echo "! Le diff n'a PAS pu être mis dans $destroot !"
+		echo "$dest n'a pas pu être produit alors voici en direct : "
+		echo "==== !"
+		svn diff  -x -u -x -w -x -b
+		echo "==== !"
+	fi
+	exit
+fi
+
+if [ "$1" = "-d" ] || [ "$1" = "d" ] || [ "$1" = "-clean" ] || [ "$1" = "clean" ] 
+then 
+	clean="-d"  
+fi
+
+if test "$clean" = "-d"
+then
+	shift
+	echo
+	echo "OK on efface les objets précédents."
+	echo
+	sudo rm -rf ~/bin/scribus$rac
+	sudo rm -rf ~/dev/scribus/build/$rac
+	echo
+	echo === Vérif 
+	echo "=== ~/bin/scribus$rac a été vidé --- il contient :"
+	ls ~/bin/scribus$rac
+	echo ---
+	echo "=== ~/dev/scribus/build/build$rac a été vidé --- il contient :"
+	ls ~/dev/scribus/build/$rac
+	echo "---"
+	echo
+	echo === Fin des vérifs
+	echo
+fi
+
+if  test "$1" = "-nomaj"
+then
+	shift
+	echo
+	echo "OK Pas de mise à jour svn"
+	echo
+else
+	echo
+	echo "Mise à jour svn" 
+	svn update $revision
+	echo
+fi
+
+[ ! -d "../build" ] && mkdir ../build
+[ ! -d "../build/$rac" ] && mkdir ../build/$rac
+cd ../build/$rac
+
+mkdir ~/bin/scribus$rac
+
+echo ===
+echo
+echo "cmake avec qtfullpath=$qtfullpath"
+cmake ../../svn -DCMAKE_INSTALL_PREFIX:PATH=~/bin/scribus$rac  -DWANT_GUI_LANG="fr" -DWANT_VERSIONING=1 -DQT_PREFIX=$qtfullpath -DWANT_HUNSPELL=1
+
+echo ===
+echo
+echo make
+make -j8
+
+echo ===
+echo
+echo make install
+sudo make install
+
+echo ===
+echo
+
+# semble pas ça en dec 2013
+#sudo ln -s ~/bin/scribus$rac/bin/scribus /usr/bin/scribus$rac
+# mais ça  (dec 2013) :
+sudo ln -s ~/bin/scribus$rac/bin/scribus-1.5.0.svn /usr/bin/scribus$rac
+echo lancer par : scribus$rac
