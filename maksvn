@@ -10,7 +10,7 @@
 qtpath="~/dev/Qt/Qt5.3/5.3"
 qtfullpath=$qtpath/gcc_64
 
-# UUNCOMMENT if you wanna compile an old revision
+# UNCOMMENT if you wanna compile an old revision
 # revision=-r18800
 
 echo ================================
