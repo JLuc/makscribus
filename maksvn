@@ -6,10 +6,11 @@
 # initialize folder with svn first
 # svn co svn://scribus.net/trunk/Scribus svn
 
-qtpath="/home/jluc/dev/Qt/Qt5.3/5.3"
+# EDIT to fit your Qt install
+qtpath="~/dev/Qt/Qt5.3/5.3"
 qtfullpath=$qtpath/gcc_64
 
-#Si on veut compiler une version particulière
+# UUNCOMMENT if you wanna compile an old revision
 # revision=-r18800
 
 echo ================================
@@ -37,7 +38,7 @@ fi
 if test "$help" = "-h";
 then
 	echo
-	echo "usage : maksvn [-h]ou[-?] [-d]ou[clean] [-nomaj] [diff [dest]]"
+	echo "Usage : maksvn [-h]ou[-?] [-d]ou[clean] [-nomaj] [diff [dest]]"
 	echo "met à jour le source svn de la 1.5 et compile"
 	echo 
 	echo === OPTIONS ====================
