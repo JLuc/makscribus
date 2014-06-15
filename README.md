@@ -11,7 +11,7 @@ Works on Ubuntu 13.10
 Todo
 ----
 
-* add il8n functionality (translate the script prompts to other languages)
+* add il8n functionality (translate the script prompts to other languages) [[Discussion]](https://github.com/JLuc/makscribus/issues/2)
 * offer other linux 'flavor' options...(involves mostly fine-tuning library installs)
 * preliminary checks to see if svn + gcc + cmake etc packages are installed
 * init the svn checkout
