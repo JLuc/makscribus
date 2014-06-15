@@ -15,3 +15,4 @@ Todo
 * offer other linux 'flavor' options...(involves mostly fine-tuning library installs)
 * preliminary checks to see if svn + gcc + cmake etc packages are installed
 * init the svn checkout
+* Ability to specify target directories instead of pre-determined ones
