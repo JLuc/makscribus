@@ -19,6 +19,7 @@ if [ ! -d "svn" ];
 then
 	echo
 	echo "Mauvais départ : il faut se situer dans le dossier parent de 'svn'. Hop, allons vers ~/dev/scribus"
+	# echo "Bad start: it must be in the parent folder 'svn'. Going to ~/dev/scribus"
 	echo
 	cd ~/dev/scribus
 fi
@@ -40,12 +41,17 @@ then
 	echo
 	echo "Usage : maksvn [-h]ou[-?] [-d]ou[clean] [-nomaj] [diff [dest]]"
 	echo "met à jour le source svn de la 1.5 et compile"
+	# echo "svn update the source and compile the 1.5"
 	echo 
 	echo === OPTIONS ====================
 	echo "-h ou -? : affiche cette aide"
 	echo "-d ou clean : efface d'abord les bin et objs déjà là"
 	echo "-nomaj" : pas de mise à jour svn
-	echo "diff : crée le fichier de diff dans dest.diff (ou svnhead.diff sinon)"
+	echo "diff : crée le fichier de diff dans dest.diff (ou svnhead.diff sinon)"	
+	# echo "-h or -? display this help" 
+	# echo "-d or clean: Deletes the first bin and existing objs" 
+	# echo "-nomaj" don't update svn update 
+	# echo "diff: creates the file diff dest.diff (svnhead.diff or otherwise)"
 	echo === INFOS ======================
 	svn info
 	exit
@@ -61,12 +67,14 @@ then
 	else dest="${2%.diff}.diff"
 	fi
 	echo ok on va mettre le diff dans $dest
+	# echo "Ok, lets apply the diff in $dest
 	$destroot=$dest
 	$dest="../$dest"
 
 	if [ -f  $dest ]; 
 	then
 		echo "Effacement de $dest" 
+		# echo "Deleting $dest" 
 		rm $dest
 	fi
 	svn diff -x -u -x -w -x -b > $dest
@@ -75,10 +83,13 @@ then
 		cat $dest
 		echo "===="
 		echo "Le diff a été mis dans $destroot"
+		# echo "The diff was put in $destroot"
 		geany $dest
 	else
 		echo "! Le diff n'a PAS pu être mis dans $destroot !"
 		echo "$dest n'a pas pu être produit alors voici en direct : "
+		# echo "! The diff has NOT been put in $destroot !" 
+		# echo "$dest could not be produced so here live"
 		echo "==== !"
 		svn diff  -x -u -x -w -x -b
 		echo "==== !"
@@ -96,19 +107,24 @@ then
 	shift
 	echo
 	echo "OK on efface les objets précédents."
+	# echo "OK the foregoing objects are deleted." 
 	echo
 	sudo rm -rf ~/bin/scribus$rac
 	sudo rm -rf ~/dev/scribus/build/$rac
 	echo
 	echo === Vérif 
+	# echo === Verify
 	echo "=== ~/bin/scribus$rac a été vidé --- il contient :"
+	# echo "=== ~/bin/scribus$rac was emptied --- it contains :" 
 	ls ~/bin/scribus$rac
 	echo ---
 	echo "=== ~/dev/scribus/build/build$rac a été vidé --- il contient :"
+	# echo "=== ~/dev/scribus/build/build$rac was emptied --- it contains :"
 	ls ~/dev/scribus/build/$rac
 	echo "---"
 	echo
 	echo === Fin des vérifs
+	# echo === End verification
 	echo
 fi
 
@@ -117,10 +133,12 @@ then
 	shift
 	echo
 	echo "OK Pas de mise à jour svn"
+	# echo "OK Don't update svn update"
 	echo
 else
 	echo
 	echo "Mise à jour svn" 
+	# echo "Last svn update" 
 	svn update $revision
 	echo
 fi
@@ -134,7 +152,9 @@ mkdir ~/bin/scribus$rac
 echo ===
 echo
 echo "cmake avec qtfullpath=$qtfullpath"
+# echo "cmake with qtfullpath=$qtfullpath"
 cmake ../../svn -DCMAKE_INSTALL_PREFIX:PATH=~/bin/scribus$rac  -DWANT_GUI_LANG="fr" -DWANT_VERSIONING=1 -DQT_PREFIX=$qtfullpath -DWANT_HUNSPELL=1
+# cmake ../../svn -DCMAKE_INSTALL_PREFIX:PATH=~/bin/scribus$rac  -DWANT_GUI_LANG="en-us" -DWANT_VERSIONING=1 -DQT_PREFIX=$qtfullpath -DWANT_HUNSPELL=1
 
 echo ===
 echo
@@ -151,3 +171,4 @@ echo
 
 sudo ln -s ~/bin/scribus$rac/bin/scribus-1.5.0.svn /usr/bin/scribus$rac
 echo lancer par : scribus$rac
+# echo run by rac scribus$rac
