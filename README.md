@@ -15,10 +15,12 @@ Folder structure is
 Works on Ubuntu 13.10
 
 Folder structure is :
+<pre>
 ~/bin/scribus15svn        for results of compile
 ~/dev/scribus/build/15svn for build files
 ~/dev/scribus/svn         for svn source files
 ~/dev/scribus             as main working directory and place for .diff
+</pre>
 
 * makgit : update to some branch of the contributors GIT repo's head and make scribus 1.5 version for that branch - out of order due to lack of activity on the contributor's repo
 
