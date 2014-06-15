@@ -2,10 +2,13 @@ makscribus
 ==========
 
 Scripts to make and install scribus.
+
 Folder structure is
+<pre>
 ~/bin/subfolder : for results of compile
 ~/dev/scribus/build/subfolder : for build files
 ~/dev/scribus/svn or git : for source files
+</pre>
 
 * maksvn : update to trunk svn head and make scribus 1.5
 
