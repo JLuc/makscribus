@@ -1,32 +1,43 @@
 makscribus
 ==========
+Scripts which make and install Bleeding-Edge Scribus versions.  
+Current scripts are _maksvn_ and _makgit_.  
+  
+#### Currently runs on:
+<!-- [ ] Ubuntu 14.10 -->
+- [ ] Ubuntu 14.04
+- [x] Ubuntu 13.10
 
-Scripts to make and install scribus.
 
-Folder structure is
-<pre>
-~/bin/subfolder : for results of compile
-~/dev/scribus/build/subfolder : for build files
-~/dev/scribus/svn or git : for source files
-</pre>
+The folder structure that the scripts use:
 
-* maksvn : update to trunk svn head and make scribus 1.5
+|Directory |Reason  |
+| :-------- | :----- |
+| ~/dev/scribus/build/subfolder | for build files |
+| ~/bin/subfolder               | for results of compile |
+| ~/dev/scribus/svn or git      | for source files |
 
-Works on Ubuntu 13.10
+### maksvn
+
+Using Subversion: update to trunk svn head and make scribus 1.5
 
 Folder structure is :
-<pre>
-~/bin/scribus15svn        for results of compile
-~/dev/scribus/build/15svn for build files
-~/dev/scribus/svn         for svn source files
-~/dev/scribus             as main working directory and place for .diff
-</pre>
 
-* makgit : update to some branch of the contributors GIT repo's head and make scribus 1.5 version for that branch - out of order due to lack of activity on the contributor's repo
+|Directory |Reason |
+| :-------- | :----- |
+| ~/bin/scribus15svn        | for results of compile  |
+| ~/dev/scribus/build/15svn | for build files         |
+| ~/dev/scribus/svn         | for svn source files    |
+| ~/dev/scribus             | as main working directory and place for .diff |
+
+### ~~makgit~~
+_out of order due to lack of activity on the contributor's repo_
+
+Using Git: update to some branch of the contributors GIT repo's head and make scribus 1.5 version for that branch 
 
 Folder structure is the same with name of leaf folder depending on git branch
 
-Todo
+# Todo
 ----
 
 * add il8n functionality (translate the script prompts to other languages) [[Discussion]](https://github.com/JLuc/makscribus/issues/2)
