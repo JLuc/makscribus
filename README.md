@@ -54,7 +54,8 @@ Out of scope :
 * Ability to specify target directories instead of pre-determined ones
 
 Done june 2014 :
-* lang and nb of CPU cores inline parameters
+* inline parameters for produced bin UI lang and nb of CPU cores compile
+* force ~/dev/scribus as initial folder for sources and build, create it when needed
 * init the svn checkout
 * English spoken
 
