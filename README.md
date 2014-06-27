@@ -38,7 +38,6 @@ Using Git: update to some branch of the contributors GIT repo's head and make sc
 Folder structure is the same with name of leaf folder depending on git branch
 
 # Todo
-----
 
 Improve :
 * command line options instead of EDIT inline values for revision number option
