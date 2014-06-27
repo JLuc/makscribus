@@ -5,11 +5,10 @@
 # has command line options for realyclean build, for creating diff and for svn update
 # has various inline options to EDIT to fit your environnement
 
-# Initialize folder with svn first
-# mkdir ~/dev
-# mkdir ~/dev/scribus
-# cd ~/dev/scribus
-# svn co svn://scribus.net/trunk/Scribus svn
+# FIXED CHOOSEN BEHAVIOUR :
+# 1) Start folder ~/dev/scribus contains both the 'svn' subfolder and the 'build' subfolder
+#    'svn' receives svn, 'build' receive build objects
+# 2) Result of make go in a subfolder of ~/bin depending on 'rac' variable 
 
 # EDIT to fit your Qt install
 qtpath="~/dev/Qt/Qt5.3/5.3"
@@ -29,24 +28,6 @@ rac=15svn
 # todo : specify as an commandline option
 # revision=-r18800
 
-echo ================================
-
-if [ ! -d "svn" ]; 
-then
-	echo
-	# echo "Mauvais départ : il faut se situer dans le dossier parent de 'svn'. Hop, allons vers ~/dev/scribus"
-	echo "We got to have 'svn' as a child folder. Going to ~/dev/scribus"
-	echo
-	cd ~/dev/scribus
-fi
-
-if [ ! -d "svn" ]; 
-then
-	exit
-fi
-
-cd svn
-
 if [ "$1" = "-?" ] || [ "$1" = "?" ] || [ "$1" = "-h" ] || [ "$1" = "h" ] || [ "$1" = "help" ] || [ "$1" = "-help" ]
     then 	help="-h"
 fi
@@ -64,14 +45,38 @@ then
 	# echo "-nomaj" : pas de mise à jour svn
 	# echo "diff : crée le fichier de diff dans dest.diff (ou svnhead.diff sinon)"	
 	echo "-h or -? display this help" 
-	echo "-d or clean: Deletes the first bin and existing objs" 
-	echo "-nomaj" dont update svn update 
-	echo "diff: creates the diff file 'dest.diff' (or 'svnhead.diff' when no dest filename is specified)"
+	echo "-d or clean: Deletes previous bin and build files" 
+	echo "-noup or -nomaj : dont update to svn head"
+	echo "diff or -diff : creates the diff file 'dest.diff' (or 'svnhead.diff' when no dest filename is specified)"
 	echo === INFOS ======================
 	svn info
 	exit
 fi
 
+echo ================================
+
+[ ! -d "~/dev" ] && mkdir ~/dev
+[ ! -d "~/dev/scribus" ] && mkdir ~/dev/scribus
+
+if [ ! -d "~/dev/scribus" ];
+then
+	echo "Error : could not find nor create ~/dev/scribus"
+	exit
+fi
+cd ~/dev/scribus
+
+if [ ! -d "svn" ]; 
+then
+	echo "Creating source folder and checkout svn files"
+	svn co svn://scribus.net/trunk/Scribus svn
+fi
+
+if [ ! -d "svn" ]; 
+then
+	echo "Error : no svn folder was created"
+fi
+
+cd svn
 
 if [ "$1" = "diff" ] || [ "$1" = "-diff" ]
 then
@@ -143,7 +148,7 @@ then
 	echo
 fi
 
-if  test "$1" = "-nomaj"
+if [ "$1" = "-noup" ] || [ "$1" = "-nomaj" ]
 then
 	shift
 	echo
