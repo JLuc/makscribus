@@ -40,9 +40,17 @@ Folder structure is the same with name of leaf folder depending on git branch
 # Todo
 ----
 
-* add il8n functionality (translate the script prompts to other languages) [[Discussion]](https://github.com/JLuc/makscribus/issues/2)
-* offer other linux 'flavor' options...(involves mostly fine-tuning library installs)
+Improve :
+* command line options instead of EDIT inline values for revision number option
+
+New features :
 * preliminary checks to see if svn + gcc + cmake etc packages are installed
-* install libraries and svn + compilers when required
 * init the svn checkout
+* add il8n functionality (translate the script prompts to other languages) [[Discussion]](https://github.com/JLuc/makscribus/issues/2)
+* required ? offer other linux 'flavor' options...(involves mostly fine-tuning library installs)
+
+Other script :
+* install libraries and svn + compilers when required
+
+Out of scope :
 * Ability to specify target directories instead of pre-determined ones
