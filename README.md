@@ -42,9 +42,8 @@ Folder structure is the same with name of leaf folder depending on git branch
 Improve :
 * command line options instead of EDIT inline values for revision number option
 
-New features :
+Maybe :
 * preliminary checks to see if svn + gcc + cmake etc packages are installed
-* init the svn checkout
 * add il8n functionality (translate the script prompts to other languages) [[Discussion]](https://github.com/JLuc/makscribus/issues/2)
 
 Other script :
@@ -53,3 +52,9 @@ Other script :
 
 Out of scope :
 * Ability to specify target directories instead of pre-determined ones
+
+Done june 2014 :
+* lang and nb of CPU cores inline parameters
+* init the svn checkout
+* English spoken
+
