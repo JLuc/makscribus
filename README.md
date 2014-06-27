@@ -50,6 +50,7 @@ Maybe :
 Other script :
 * install libraries and svn + compilers when required
 * required ? offer other linux 'flavor' options...(involves mostly fine-tuning library installs)
+* checkout and update plugin from github and compile ? (for ex https://github.com/aoloe/scribus-plugin-export-epub)
 
 Out of scope :
 * Ability to specify target directories instead of pre-determined ones
