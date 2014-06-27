@@ -40,7 +40,8 @@ Folder structure is the same with name of leaf folder depending on git branch
 # Todo
 
 Improve :
-* command line options instead of EDIT inline values for revision number option
+* command line options instead of EDIT inline values for revision number option*
+* use getopts to parse CLI options
 
 Maybe :
 * preliminary checks to see if svn + gcc + cmake etc packages are installed
