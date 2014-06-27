@@ -76,7 +76,8 @@ fi
 
 if [ ! -d "svn" ]; 
 then
-	echo "Error : no svn folder was created"
+	echo "Error : no svn folder could be created"
+	exit
 fi
 
 cd svn
