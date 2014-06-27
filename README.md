@@ -46,10 +46,10 @@ New features :
 * preliminary checks to see if svn + gcc + cmake etc packages are installed
 * init the svn checkout
 * add il8n functionality (translate the script prompts to other languages) [[Discussion]](https://github.com/JLuc/makscribus/issues/2)
-* required ? offer other linux 'flavor' options...(involves mostly fine-tuning library installs)
 
 Other script :
 * install libraries and svn + compilers when required
+* required ? offer other linux 'flavor' options...(involves mostly fine-tuning library installs)
 
 Out of scope :
 * Ability to specify target directories instead of pre-determined ones
