@@ -58,8 +58,6 @@ echo ================================
 [ ! -d ~/dev ] && mkdir ~/dev
 [ ! -d ~/dev/scribus ] && mkdir ~/dev/scribus
 [ ! -d ~/bin/scribus$rac ] && mkdir ~/bin/scribus$rac
-[ ! -d ../build ] && mkdir ../build
-[ ! -d ../build/$rac ] && mkdir ../build/$rac
 
 if [ ! -d ~/dev/scribus ];
 then
@@ -67,6 +65,8 @@ then
 	exit
 fi
 cd ~/dev/scribus
+[ ! -d ../build ] && mkdir ../build
+[ ! -d ../build/$rac ] && mkdir ../build/$rac
 
 if [ ! -d "svn" ]; 
 then
