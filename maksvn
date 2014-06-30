@@ -177,7 +177,7 @@ echo
 # echo "cmake avec qtfullpath=$qtfullpath"
 echo "cmake with qtfullpath=$qtfullpath"
 
-cmake ../../svn -DCMAKE_INSTALL_PREFIX:PATH=~/bin/scribus$rac  -DWANT_GUI_LANG="$mylang" -DWANT_VERSIONING=1 -DQT_PREFIX=$qtfullpath -DWANT_HUNSPELL=1 -DWANT_GRAPHICSMAGICK=1
+cmake ../../svn -DCMAKE_INSTALL_PREFIX:PATH=~/bin/scribus$rac  -DWANT_GUI_LANG="$mylang" -DWANT_VERSIONING=1 -DQT_PREFIX=$qtfullpath -DWANT_HUNSPELL=1 -DWANT_GRAPHICSMAGICK=1  -DWANT_SVNVERSION=1
 
 echo ===
 echo
