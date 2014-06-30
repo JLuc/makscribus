@@ -55,18 +55,20 @@ fi
 
 echo ================================
 
-[ ! -d ~/dev ] && mkdir ~/dev
-[ ! -d ~/dev/scribus ] && mkdir ~/dev/scribus
-[ ! -d ~/bin/scribus$rac ] && mkdir ~/bin/scribus$rac
+cd ~
+pwd
+[ ! -d dev ] && mkdir dev
+[ ! -d dev/scribus ] && mkdir dev/scribus
+[ ! -d bin/scribus$rac ] && mkdir bin/scribus$rac
 
-if [ ! -d ~/dev/scribus ];
+if [ ! -d dev/scribus ];
 then
 	echo "Error : could not find nor create ~/dev/scribus"
 	exit
 fi
-cd ~/dev/scribus
-[ ! -d ../build ] && mkdir ../build
-[ ! -d ../build/$rac ] && mkdir ../build/$rac
+cd dev/scribus
+[ ! -d build ] && mkdir build
+[ ! -d build/$rac ] && mkdir build/$rac
 
 if [ ! -d "svn" ]; 
 then
@@ -133,8 +135,8 @@ then
 	# echo "OK on efface les objets précédents."
 	echo "Deleting the foregoing build objects and exec." 
 	echo
-	sudo rm -rf ~/bin/scribus$rac
-	sudo rm -rf ~/dev/scribus/build/$rac
+	sudo rm -rf ~/bin/scribus$rac/*
+	sudo rm -rf ~/dev/scribus/build/$rac/*
 	echo
 	echo === Verify
 	# echo "=== ~/bin/scribus$rac a été vidé --- il contient :"
@@ -167,6 +169,7 @@ else
 	echo
 fi
 
+pwd
 cd ../build/$rac
 
 echo ===
@@ -174,7 +177,7 @@ echo
 # echo "cmake avec qtfullpath=$qtfullpath"
 echo "cmake with qtfullpath=$qtfullpath"
 
-cmake ../../svn -DCMAKE_INSTALL_PREFIX:PATH=~/bin/scribus$rac  -DWANT_GUI_LANG="$mylang" -DWANT_VERSIONING=1 -DQT_PREFIX=$qtfullpath -DWANT_HUNSPELL=1
+cmake ../../svn -DCMAKE_INSTALL_PREFIX:PATH=~/bin/scribus$rac  -DWANT_GUI_LANG="$mylang" -DWANT_VERSIONING=1 -DQT_PREFIX=$qtfullpath -DWANT_HUNSPELL=1 -DWANT_GRAPHICSMAGICK=1
 
 echo ===
 echo
