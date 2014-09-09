@@ -8,15 +8,14 @@
 # FIXED CHOOSEN BEHAVIOUR :
 # 1) Start folder ~/dev/scribus contains both the 'svn' subfolder and the 'build' subfolder
 #    'svn' receives svn, 'build' receive build objects
-# 2) Result of make go in a subfolder of ~/bin (set $execdirpath variable to change) depending on 'suffix' variable 
+# 2) Result of make go $execdirpath (default set to /opt), in a subfolder depending on $suffix
 
 # EDIT to fit your Qt install
 qtpath="~/dev/Qt/Qt5.3/5.3"
 qtfullpath=$qtpath/gcc_64
 
-# en standard execdirpath=~/bin 
-# pour que ça soit sur le SSD on met sous /, dans /locabin
-execdirpath=/localbin
+# EDIT to fit your local exec folder
+execdirpath=/opt
 
 # EDIT to fit your langage
 mylang="fr;en-us"
@@ -40,7 +39,6 @@ if test "$help" = "-h";
 then
 	echo
 	echo "Usage : maksvn [-h]ou[-?] [-d]ou[clean] [-nomaj] [diff [dest]]"
-	# echo "met à jour le source svn de la 1.5 et compile"
 	echo "svn update the source and compile the 1.5"
 	echo 
 	echo === OPTIONS ====================
