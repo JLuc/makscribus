@@ -8,11 +8,15 @@
 # FIXED CHOOSEN BEHAVIOUR :
 # 1) Start folder ~/dev/scribus contains both the 'svn' subfolder and the 'build' subfolder
 #    'svn' receives svn, 'build' receive build objects
-# 2) Result of make go in a subfolder of ~/bin depending on 'rac' variable 
+# 2) Result of make go in a subfolder of ~/bin (set $execdirpath variable to change) depending on 'suffix' variable 
 
 # EDIT to fit your Qt install
 qtpath="~/dev/Qt/Qt5.3/5.3"
 qtfullpath=$qtpath/gcc_64
+
+# en standard execdirpath=~/bin 
+# pour que ça soit sur le SSD on met sous /, dans /locabin
+execdirpath=/localbin
 
 # EDIT to fit your langage
 mylang="fr;en-us"
@@ -20,13 +24,13 @@ mylang="fr;en-us"
 # EDIT to fit your cpu cores
 cores=8
 
-# EDIT postfix for executable
-# when rac is 15svn, executable will be scribus15svn
-rac=15svn
+# EDIT suffix = postfix for executable
+# when suffix is 15svn, executable will be scribus15svn
+suffix=15svn
 
 # UNCOMMENT and EDIT if you wanna compile an old revision
-# todo : specify as an commandline option
-# revision=-r18800
+# revision=-r19396
+# echo "! BUILD REVISION : $revision !" 
 
 if [ "$1" = "-?" ] || [ "$1" = "?" ] || [ "$1" = "-h" ] || [ "$1" = "h" ] || [ "$1" = "help" ] || [ "$1" = "-help" ]
     then 	help="-h"
@@ -40,12 +44,8 @@ then
 	echo "svn update the source and compile the 1.5"
 	echo 
 	echo === OPTIONS ====================
-	# echo "-h ou -? : affiche cette aide"
-	# echo "-d ou clean : efface d'abord les bin et objs déjà là"
-	# echo "-nomaj" : pas de mise à jour svn
-	# echo "diff : crée le fichier de diff dans dest.diff (ou svnhead.diff sinon)"	
 	echo "-h or -? display this help" 
-	echo "-d or clean: Deletes previous bin and build files" 
+	echo "-d or clean: Deletes previous build files (not the execs)" 
 	echo "-noup or -nomaj : dont update to svn head"
 	echo "diff or -diff : creates the diff file 'dest.diff' (or 'svnhead.diff' when no dest filename is specified)"
 	echo === INFOS ======================
@@ -57,9 +57,12 @@ echo ================================
 
 cd ~
 pwd
+
+[ ! -d $execdirpath ] && mkdir $execdirpath
+[ ! -d $execdirpath ] && echo "Error : exec folder '$execdirpath' does not exist. Create $execdirpath before launching maksvn" && exit
 [ ! -d dev ] && mkdir dev
 [ ! -d dev/scribus ] && mkdir dev/scribus
-[ ! -d bin/scribus$rac ] && mkdir bin/scribus$rac
+[ ! -d bin/scribus$suffix ] && mkdir bin/scribus$suffix
 
 if [ ! -d dev/scribus ];
 then
@@ -68,7 +71,7 @@ then
 fi
 cd dev/scribus
 [ ! -d build ] && mkdir build
-[ ! -d build/$rac ] && mkdir build/$rac
+[ ! -d build/$suffix ] && mkdir build/$suffix
 
 if [ ! -d "svn" ]; 
 then
@@ -132,25 +135,12 @@ if test "$clean" = "-d"
 then
 	shift
 	echo
-	# echo "OK on efface les objets précédents."
-	echo "Deleting the foregoing build objects and exec." 
+	echo "Deleting the foregoing build objects." 
 	echo
-	sudo rm -rf ~/bin/scribus$rac/*
-	sudo rm -rf ~/dev/scribus/build/$rac/*
-	echo
-	echo === Verify
-	# echo "=== ~/bin/scribus$rac a été vidé --- il contient :"
-	echo "=== ~/bin/scribus$rac was emptied --- it contains :" 
-	ls ~/bin/scribus$rac
-
-	echo ---
-	# echo "=== ~/dev/scribus/build/build$rac a été vidé --- il contient :"
-	echo "=== ~/dev/scribus/build/build$rac was emptied --- it contains :"
-	ls ~/dev/scribus/build/$rac
-	echo "---"
-	echo
-	# echo === Fin des vérifs
-	echo === End verification
+#	sudo rm -rf $execdirpath/scribus$suffix/*
+	sudo rm -rf ~/dev/scribus/build/$suffix/*
+	echo "~/dev/scribus/build/build$suffix was emptied --- it contains :"
+	ls ~/dev/scribus/build/$suffix
 	echo
 fi
 
@@ -158,26 +148,23 @@ if [ "$1" = "-noup" ] || [ "$1" = "-nomaj" ]
 then
 	shift
 	echo
-	# echo "OK Pas de mise à jour svn"
 	echo "NOT updating svn update"
 	echo
 else
 	echo
-	# echo "Mise à jour svn" 
 	echo "Updating to svn $revision" 
 	svn update $revision
 	echo
 fi
 
 pwd
-cd ../build/$rac
+cd ../build/$suffix
 
 echo ===
 echo
-# echo "cmake avec qtfullpath=$qtfullpath"
 echo "cmake with qtfullpath=$qtfullpath"
 
-cmake ../../svn -DCMAKE_INSTALL_PREFIX:PATH=~/bin/scribus$rac  -DWANT_GUI_LANG="$mylang" -DWANT_VERSIONING=1 -DQT_PREFIX=$qtfullpath -DWANT_HUNSPELL=1 -DWANT_GRAPHICSMAGICK=1 -DWANT_SVNVERSION=1
+cmake ../../svn -DCMAKE_INSTALL_PREFIX:PATH=$execdirpath/scribus$suffix  -DWANT_GUI_LANG="$mylang" -DWANT_VERSIONING=1 -DQT_PREFIX=$qtfullpath -DWANT_HUNSPELL=1 -DWANT_GRAPHICSMAGICK=1 -DWANT_SVNVERSION=1
 
 echo ===
 echo
@@ -186,12 +173,13 @@ make -j$cores
 
 echo ===
 echo
-echo make install
+echo make install to $execdirpath
 sudo make install
 
 echo ===
 echo
 
-sudo ln -s ~/bin/scribus$rac/bin/scribus-1.5.0.svn /usr/bin/scribus$rac
-# echo lancer par : scribus$rac
-echo Run with scribus$rac
+sudo unlink /usr/bin/scribus$suffix
+sudo ln -s $execdirpath/scribus$suffix/bin/scribus-1.5.0.svn /usr/bin/scribus$suffix
+echo exec is $execdirpath/scribus$suffix/bin/scribus-1.5.0.svn
+echo Run with scribus$suffix
