@@ -6,16 +6,20 @@
 # has various inline options to EDIT to fit your environnement
 
 # FIXED CHOOSEN BEHAVIOUR :
-# 1) Start folder ~/dev/scribus contains both the 'svn' subfolder and the 'build' subfolder
+# Start folder ~/dev/scribus contains both the 'svn' subfolder and the 'build' subfolder
 #    'svn' receives svn, 'build' receive build objects
-# 2) Result of make go $execdirpath (default set to /opt), in a subfolder depending on $suffix
+# Other folders can be changed
 
 # EDIT to fit your Qt install
-qtpath="~/dev/Qt/Qt5.3/5.3"
+#   qtpath="~/dev/Qt/Qt5.3/5.3"
+#   qtpath="~/dev/Qt/Qt5.3.1/5.3"
+qtpath="~/dev/Qt/Qt5.3.2/5.3"
 qtfullpath=$qtpath/gcc_64
 
-# EDIT to fit your local exec folder
-execdirpath=/opt
+# easy default could be execdirpath=~/bin 
+# but so it got chances to be on SSD, it goes to /locabin
+# EDIT to fit your exec folder
+execdirpath=/localbin
 
 # EDIT to fit your langage
 mylang="fr;en-us"
@@ -23,13 +27,24 @@ mylang="fr;en-us"
 # EDIT to fit your cpu cores
 cores=8
 
-# EDIT suffix = postfix for executable
+# EDIT postfix for executable
 # when suffix is 15svn, executable will be scribus15svn
 suffix=15svn
 
 # UNCOMMENT and EDIT if you wanna compile an old revision
-# revision=-r19396
-# echo "! BUILD REVISION : $revision !" 
+# todo : specify as an commandline option
+# revision=-r19507
+
+# Options for make, including - (Ex : "-B")
+makeopt=""
+
+
+if [ "$revision" != "" ]
+	then 
+		echo
+		echo "!!!! BUILD REVISION $revision !!!!"  
+		echo
+fi
 
 if [ "$1" = "-?" ] || [ "$1" = "?" ] || [ "$1" = "-h" ] || [ "$1" = "h" ] || [ "$1" = "help" ] || [ "$1" = "-help" ]
     then 	help="-h"
@@ -39,6 +54,7 @@ if test "$help" = "-h";
 then
 	echo
 	echo "Usage : maksvn [-h]ou[-?] [-d]ou[clean] [-nomaj] [diff [dest]]"
+	# echo "met à jour le source svn de la 1.5 et compile"
 	echo "svn update the source and compile the 1.5"
 	echo 
 	echo === OPTIONS ====================
@@ -127,19 +143,16 @@ fi
 if [ "$1" = "-d" ] || [ "$1" = "d" ] || [ "$1" = "-clean" ] || [ "$1" = "clean" ] 
 then 
 	clean="-d"  
-fi
-
-if test "$clean" = "-d"
-then
 	shift
 	echo
 	echo "Deleting the foregoing build objects." 
 	echo
 #	sudo rm -rf $execdirpath/scribus$suffix/*
 	sudo rm -rf ~/dev/scribus/build/$suffix/*
-	echo "~/dev/scribus/build/build$suffix was emptied --- it contains :"
+	echo "~/dev/scribus/build/build$suffix was emptied --- it now contains :"
 	ls ~/dev/scribus/build/$suffix
 	echo
+	makeopt="$makeopt clean"
 fi
 
 if [ "$1" = "-noup" ] || [ "$1" = "-nomaj" ]
@@ -166,8 +179,8 @@ cmake ../../svn -DCMAKE_INSTALL_PREFIX:PATH=$execdirpath/scribus$suffix  -DWANT_
 
 echo ===
 echo
-echo make
-make -j$cores
+echo make $makeopt -j$cores
+make $makeopt -j$cores
 
 echo ===
 echo
