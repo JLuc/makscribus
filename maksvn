@@ -1,9 +1,9 @@
 #!/bin/sh
 
-# maksvn script
-# creates folders for out of source build 
-# has command line options for realyclean build, for creating diff and for svn update
-# has various inline options to EDIT to fit your environnement
+# maksvn script update source to svn and totally builds scribus
+# has command line options for a really clean build, for creating diffs and for svn update
+# has various inline options to edit to fit your environnement (cpu cores, choice of folders)
+# and more options to build to a specific revision or to not update to svn
 
 # FIXED CHOOSEN BEHAVIOUR :
 # Start folder ~/dev/scribus contains both the 'svn' subfolder and the 'build' subfolder
@@ -11,8 +11,8 @@
 # Other folders can be changed
 
 # EDIT to fit your Qt install
-#   qtpath="~/dev/Qt/Qt5.3/5.3"
-#   qtpath="~/dev/Qt/Qt5.3.1/5.3"
+# qtpath="~/dev/Qt/Qt5.3/5.3"
+# qtpath="~/dev/Qt/Qt5.3.1/5.3"
 qtpath="~/dev/Qt/Qt5.3.2/5.3"
 qtfullpath=$qtpath/gcc_64
 
@@ -24,7 +24,7 @@ execdirpath=/localbin
 # EDIT to fit your langage
 mylang="fr;en-us"
 
-# EDIT to fit your cpu cores
+# EDIT to fit your cpu cores = possible parallel processes
 cores=8
 
 # EDIT postfix for executable
@@ -35,9 +35,8 @@ suffix=15svn
 # todo : specify as an commandline option
 # revision=-r19507
 
-# Options for make, including - (Ex : "-B")
-makeopt=""
-
+# More options for make, including - (Ex : "-B")
+usermakeopt=""
 
 if [ "$revision" != "" ]
 	then 
@@ -74,31 +73,22 @@ pwd
 
 [ ! -d $execdirpath ] && mkdir $execdirpath
 [ ! -d $execdirpath ] && echo "Error : exec folder '$execdirpath' does not exist. Create $execdirpath before launching maksvn" && exit
+
 [ ! -d dev ] && mkdir dev
 [ ! -d dev/scribus ] && mkdir dev/scribus
-[ ! -d bin/scribus$suffix ] && mkdir bin/scribus$suffix
+[ ! -d dev/scribus ] && echo "Error : source folder ~/dev/scribus could not be created. Create it before launching maksvn" && exit
 
-if [ ! -d dev/scribus ];
-then
-	echo "Error : could not find nor create ~/dev/scribus"
-	exit
-fi
 cd dev/scribus
 [ ! -d build ] && mkdir build
 [ ! -d build/$suffix ] && mkdir build/$suffix
+[ ! -d build/$suffix ] && echo "Error : build folder ~/dev/scribus/build/$suffix could not be created. Create it before launching maksvn" && exit
 
 if [ ! -d "svn" ]; 
 then
 	echo "Creating source folder and checkout svn files"
 	svn co svn://scribus.net/trunk/Scribus svn
 fi
-
-if [ ! -d "svn" ]; 
-then
-	echo "Error : no svn folder could be created"
-	exit
-fi
-
+[ ! -d "svn" ] && echo "Error : no svn folder could be created" &&	exit
 cd svn
 
 if [ "$1" = "diff" ] || [ "$1" = "-diff" ]
@@ -152,7 +142,7 @@ then
 	echo "~/dev/scribus/build/build$suffix was emptied --- it now contains :"
 	ls ~/dev/scribus/build/$suffix
 	echo
-	makeopt="$makeopt clean"
+	maketarget="clean"
 fi
 
 if [ "$1" = "-noup" ] || [ "$1" = "-nomaj" ]
@@ -168,27 +158,33 @@ else
 	echo
 fi
 
-pwd
+echo
+echo ===
 cd ../build/$suffix
+pwd
+echo cmake to $execdirpath/scribus$suffix with qtfullpath=$qtfullpath
 
-echo ===
+#  -DCMAKE_EXE_LINKER_FLAGS="-lQt5Quick -lQt5PrintSupport"
+# pour résoudre (?) :
+# /usr/bin/ld: ne peut trouver -llibQt5PrintSupport
+# ou
+# /usr/bin/ld: CMakeFiles/scribus-1.5.0.svn.dir/ui/helpbrowser.cpp.o: référence au symbole non défini «_ZN12QPrintDialogC1EP8QPrinterP7QWidget»
+# /home/jluc/dev/Qt/Qt5.3.2/5.3/gcc_64/lib/libQt5PrintSupport.so: error adding symbols: DSO missing from command line
+echo cmake ../../svn -DCMAKE_INSTALL_PREFIX:PATH=$execdirpath/scribus$suffix  -DWANT_GUI_LANG="$mylang" -DWANT_VERSIONING=1 -DQT_PREFIX=$qtfullpath -DWANT_HUNSPELL=1 -DWANT_GRAPHICSMAGICK=1 -DWANT_SVNVERSION=1 -DCMAKE_EXE_LINKER_FLAGS='-lQt5Quick -lQt5PrintSupport'
+cmake ../../svn -DCMAKE_INSTALL_PREFIX:PATH=$execdirpath/scribus$suffix  -DWANT_GUI_LANG="$mylang" -DWANT_VERSIONING=1 -DQT_PREFIX=$qtfullpath -DWANT_HUNSPELL=1 -DWANT_GRAPHICSMAGICK=1 -DWANT_SVNVERSION=1 -DCMAKE_EXE_LINKER_FLAGS='-lQt5Quick -lQt5PrintSupport'
+
 echo
-echo "cmake with qtfullpath=$qtfullpath"
-
-cmake ../../svn -DCMAKE_INSTALL_PREFIX:PATH=$execdirpath/scribus$suffix  -DWANT_GUI_LANG="$mylang" -DWANT_VERSIONING=1 -DQT_PREFIX=$qtfullpath -DWANT_HUNSPELL=1 -DWANT_GRAPHICSMAGICK=1 -DWANT_SVNVERSION=1
-
 echo ===
-echo
-echo make $makeopt -j$cores
-make $makeopt -j$cores
+echo make -j$cores $usermakeopt
+make -j$cores $usermakeopt
 
-echo ===
 echo
-echo make install to $execdirpath
+echo ===
+echo make install
 sudo make install
 
-echo ===
 echo
+echo ===
 
 sudo unlink /usr/bin/scribus$suffix
 sudo ln -s $execdirpath/scribus$suffix/bin/scribus-1.5.0.svn /usr/bin/scribus$suffix
