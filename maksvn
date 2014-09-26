@@ -4,11 +4,15 @@
 # has command line options for a really clean build, for creating diffs and for svn update
 # has various inline options to edit to fit your environnement (cpu cores, choice of folders)
 # and more options to build to a specific revision or to not update to svn
+#!/bin/sh
 
 # FIXED CHOOSEN BEHAVIOUR :
-# Start folder ~/dev/scribus contains both the 'svn' subfolder and the 'build' subfolder
-#    'svn' receives svn, 'build' receive build objects
-# Other folders can be changed
+# folders and path to libraries can be set to user conveninence
+# but sourcepath folder must contain both the 'svn' subfolder and the 'build' subfolder
+# ('svn' receives svn repo clone, 'build' receive build objects)
+
+# Set to user convenience
+sourcepath=~/dev/scribus
 
 # EDIT to fit your Qt install
 # qtpath="~/dev/Qt/Qt5.3/5.3"
@@ -16,7 +20,7 @@
 qtpath="~/dev/Qt/Qt5.3.2/5.3"
 qtfullpath=$qtpath/gcc_64
 
-# easy default could be execdirpath=~/bin 
+# Default could be execdirpath=~/bin 
 # but so it got chances to be on SSD, it goes to /locabin
 # EDIT to fit your exec folder
 execdirpath=/localbin
@@ -68,21 +72,19 @@ fi
 
 echo ================================
 
-cd ~
-pwd
-
 [ ! -d $execdirpath ] && mkdir $execdirpath
 [ ! -d $execdirpath ] && echo "Error : exec folder '$execdirpath' does not exist. Create $execdirpath before launching maksvn" && exit
 
-[ ! -d dev ] && mkdir dev
-[ ! -d dev/scribus ] && mkdir dev/scribus
-[ ! -d dev/scribus ] && echo "Error : source folder ~/dev/scribus could not be created. Create it before launching maksvn" && exit
+[ ! -d $sourcepath ] && mkdir $sourcepath
+[ ! -d $sourcepath ] && echo "Error : source folder $sourcepath could not be created. Create it before launching maksvn" && exit
 
-cd dev/scribus
+cd $sourcepath
 [ ! -d build ] && mkdir build
+[ ! -d build ] && echo "Error : build folder $sourcepath/build could not be created. Create it before launching maksvn" && exit
 [ ! -d build/$suffix ] && mkdir build/$suffix
-[ ! -d build/$suffix ] && echo "Error : build folder ~/dev/scribus/build/$suffix could not be created. Create it before launching maksvn" && exit
+[ ! -d build/$suffix ] && echo "Error : build folder $sourcepath/build/$suffix could not be created. Create it before launching maksvn" && exit
 
+# first svn checkout
 if [ ! -d "svn" ]; 
 then
 	echo "Creating source folder and checkout svn files"
@@ -90,6 +92,7 @@ then
 fi
 [ ! -d "svn" ] && echo "Error : no svn folder could be created" &&	exit
 cd svn
+pwd
 
 if [ "$1" = "diff" ] || [ "$1" = "-diff" ]
 then
@@ -99,12 +102,14 @@ then
 	else dest="${2%.diff}.diff"
 	fi
 	
+	# echo ok on va mettre le diff dans $dest
 	echo Lets produce the diff in $dest
 	destroot="$dest"
 	dest="../$dest"
 
 	if [ -f  $dest ]; 
 	then
+		# echo "Effacement de $dest" 
 		echo "Deleting $dest" 
 		rm $dest
 	fi
@@ -113,9 +118,12 @@ then
 	then
 		cat $dest
 		echo "===="
+		# echo "Le diff a été mis dans $destroot"
 		echo "The diff was produced in $destroot"
 		geany $dest
 	else
+		# echo "! Le diff n'a PAS pu être mis dans $destroot !"
+		# echo "$dest n'a pas pu être produit alors voici en direct : "
 		echo "! The diff has NOT been put in $destroot !" 
 		echo "$dest could not be produced so here live"
 		echo "==== !"
@@ -125,7 +133,6 @@ then
 	exit
 fi
 
-maketarget=""
 if [ "$1" = "-d" ] || [ "$1" = "d" ] || [ "$1" = "-clean" ] || [ "$1" = "clean" ] 
 then 
 	clean="-d"  
@@ -133,11 +140,10 @@ then
 	echo
 	echo "Deleting the foregoing build objects." 
 	echo
-# Dont delete precious previous execs
 #	sudo rm -rf $execdirpath/scribus$suffix/*
-	sudo rm -rf ~/dev/scribus/build/$suffix/*
-	echo "~/dev/scribus/build/build$suffix was emptied --- it now contains :"
-	ls ~/dev/scribus/build/$suffix
+	sudo rm -rf $sourcepath/build/$suffix/*
+	echo "$sourcepath/build/build$suffix was emptied --- it now contains :"
+	ls $sourcepath/build/$suffix
 	echo
 	maketarget="clean"
 fi
@@ -161,18 +167,19 @@ cd ../build/$suffix
 pwd
 echo cmake to $execdirpath/scribus$suffix with qtfullpath=$qtfullpath
 
-# -DCMAKE_EXE_LINKER_FLAGS="-lQt5Quick -lQt5PrintSupport"
-# is intended to fix errors when using Qt5.3.2 :
+#  -DCMAKE_EXE_LINKER_FLAGS="-lQt5Quick -lQt5PrintSupport"
+# pour résoudre (?) :
 # /usr/bin/ld: ne peut trouver -llibQt5PrintSupport
+# ou
 # /usr/bin/ld: CMakeFiles/scribus-1.5.0.svn.dir/ui/helpbrowser.cpp.o: référence au symbole non défini «_ZN12QPrintDialogC1EP8QPrinterP7QWidget»
 # /home/jluc/dev/Qt/Qt5.3.2/5.3/gcc_64/lib/libQt5PrintSupport.so: error adding symbols: DSO missing from command line
-echo cmake ../../svn -DCMAKE_INSTALL_PREFIX:PATH=$execdirpath/scribus$suffix  -DWANT_GUI_LANG="$mylang" -DWANT_VERSIONING=1 -DQT_PREFIX=$qtfullpath -DWANT_HUNSPELL=1 -DWANT_GRAPHICSMAGICK=1 -DWANT_SVNVERSION=1 -DCMAKE_EXE_LINKER_FLAGS="-lQt5Quick -lQt5PrintSupport"
-cmake ../../svn -DCMAKE_INSTALL_PREFIX:PATH=$execdirpath/scribus$suffix  -DWANT_GUI_LANG="$mylang" -DWANT_VERSIONING=1 -DQT_PREFIX=$qtfullpath -DWANT_HUNSPELL=1 -DWANT_GRAPHICSMAGICK=1 -DWANT_SVNVERSION=1 -DCMAKE_EXE_LINKER_FLAGS="-lQt5Quick -lQt5PrintSupport"
+echo cmake ../../svn -DCMAKE_INSTALL_PREFIX:PATH=$execdirpath/scribus$suffix  -DWANT_GUI_LANG="$mylang" -DWANT_VERSIONING=1 -DQT_PREFIX=$qtfullpath -DWANT_HUNSPELL=1 -DWANT_GRAPHICSMAGICK=1 -DWANT_SVNVERSION=1 -DCMAKE_EXE_LINKER_FLAGS='-lQt5Quick -lQt5PrintSupport'
+cmake ../../svn -DCMAKE_INSTALL_PREFIX:PATH=$execdirpath/scribus$suffix  -DWANT_GUI_LANG="$mylang" -DWANT_VERSIONING=1 -DQT_PREFIX=$qtfullpath -DWANT_HUNSPELL=1 -DWANT_GRAPHICSMAGICK=1 -DWANT_SVNVERSION=1 -DCMAKE_EXE_LINKER_FLAGS='-lQt5Quick -lQt5PrintSupport'
 
 echo
 echo ===
-echo make -j$cores $usermakeopt $maketarget
-make -j$cores $usermakeopt $maketarget
+echo make -j$cores $usermakeopt
+make -j$cores $usermakeopt
 
 echo
 echo ===
