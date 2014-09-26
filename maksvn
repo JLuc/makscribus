@@ -1,14 +1,11 @@
 #!/bin/sh
 
-# maksvn script update source to svn and totally builds scribus
-# has command line options for a really clean build, for creating diffs and for svn update
-# has various inline options to edit to fit your environnement (cpu cores, choice of folders)
-# and more options to build to a specific revision or to not update to svn
-#!/bin/sh
+# maksvn script creates folders for out of source build 
+# has command line options for really clean build, creating diffs and for svn update
+# has various inline options to EDIT to fit your environnement
 
-# FIXED CHOOSEN BEHAVIOUR :
-# folders and path to libraries can be set to user conveninence
-# but sourcepath folder must contain both the 'svn' subfolder and the 'build' subfolder
+# sourcepath, qt library and destination folders can be set to user conveninence
+# but sourcepath will later contain both the 'svn' subfolder and the 'build' subfolder
 # ('svn' receives svn repo clone, 'build' receive build objects)
 
 # Set to user convenience
@@ -18,7 +15,6 @@ sourcepath=~/dev/scribus
 # qtpath="~/dev/Qt/Qt5.3/5.3"
 # qtpath="~/dev/Qt/Qt5.3.1/5.3"
 qtpath="~/dev/Qt/Qt5.3.2/5.3"
-qtfullpath=$qtpath/gcc_64
 
 # Default could be execdirpath=~/bin 
 # but so it got chances to be on SSD, it goes to /locabin
@@ -42,6 +38,11 @@ suffix=15svn
 # More options for make, including - (Ex : "-B")
 usermakeopt=""
 
+# End of user editable part
+####################################################"
+
+qtfullpath=$qtpath/gcc_64
+
 if [ "$revision" != "" ]
 	then 
 		echo
@@ -57,7 +58,6 @@ if test "$help" = "-h";
 then
 	echo
 	echo "Usage : maksvn [-h]ou[-?] [-d]ou[clean] [-nomaj] [diff [dest]]"
-	# echo "met à jour le source svn de la 1.5 et compile"
 	echo "svn update the source and compile the 1.5"
 	echo 
 	echo === OPTIONS ====================
@@ -102,14 +102,12 @@ then
 	else dest="${2%.diff}.diff"
 	fi
 	
-	# echo ok on va mettre le diff dans $dest
 	echo Lets produce the diff in $dest
 	destroot="$dest"
 	dest="../$dest"
 
 	if [ -f  $dest ]; 
 	then
-		# echo "Effacement de $dest" 
 		echo "Deleting $dest" 
 		rm $dest
 	fi
@@ -118,11 +116,9 @@ then
 	then
 		cat $dest
 		echo "===="
-		# echo "Le diff a été mis dans $destroot"
 		echo "The diff was produced in $destroot"
 		geany $dest
 	else
-		# echo "! Le diff n'a PAS pu être mis dans $destroot !"
 		# echo "$dest n'a pas pu être produit alors voici en direct : "
 		echo "! The diff has NOT been put in $destroot !" 
 		echo "$dest could not be produced so here live"
@@ -133,19 +129,21 @@ then
 	exit
 fi
 
+maketarget=""
 if [ "$1" = "-d" ] || [ "$1" = "d" ] || [ "$1" = "-clean" ] || [ "$1" = "clean" ] 
 then 
-	clean="-d"  
 	shift
+	clean="-d"  
+	maketarget="clean"
 	echo
 	echo "Deleting the foregoing build objects." 
-	echo
-#	sudo rm -rf $execdirpath/scribus$suffix/*
 	sudo rm -rf $sourcepath/build/$suffix/*
 	echo "$sourcepath/build/build$suffix was emptied --- it now contains :"
 	ls $sourcepath/build/$suffix
 	echo
-	maketarget="clean"
+# Dont delete precious previous execs
+#	sudo rm -rf $execdirpath/scribus$suffix/*
+	echo
 fi
 
 if [ "$1" = "-noup" ] || [ "$1" = "-nomaj" ]
@@ -167,19 +165,13 @@ cd ../build/$suffix
 pwd
 echo cmake to $execdirpath/scribus$suffix with qtfullpath=$qtfullpath
 
-#  -DCMAKE_EXE_LINKER_FLAGS="-lQt5Quick -lQt5PrintSupport"
-# pour résoudre (?) :
-# /usr/bin/ld: ne peut trouver -llibQt5PrintSupport
-# ou
-# /usr/bin/ld: CMakeFiles/scribus-1.5.0.svn.dir/ui/helpbrowser.cpp.o: référence au symbole non défini «_ZN12QPrintDialogC1EP8QPrinterP7QWidget»
-# /home/jluc/dev/Qt/Qt5.3.2/5.3/gcc_64/lib/libQt5PrintSupport.so: error adding symbols: DSO missing from command line
 echo cmake ../../svn -DCMAKE_INSTALL_PREFIX:PATH=$execdirpath/scribus$suffix  -DWANT_GUI_LANG="$mylang" -DWANT_VERSIONING=1 -DQT_PREFIX=$qtfullpath -DWANT_HUNSPELL=1 -DWANT_GRAPHICSMAGICK=1 -DWANT_SVNVERSION=1 -DCMAKE_EXE_LINKER_FLAGS='-lQt5Quick -lQt5PrintSupport'
 cmake ../../svn -DCMAKE_INSTALL_PREFIX:PATH=$execdirpath/scribus$suffix  -DWANT_GUI_LANG="$mylang" -DWANT_VERSIONING=1 -DQT_PREFIX=$qtfullpath -DWANT_HUNSPELL=1 -DWANT_GRAPHICSMAGICK=1 -DWANT_SVNVERSION=1 -DCMAKE_EXE_LINKER_FLAGS='-lQt5Quick -lQt5PrintSupport'
 
 echo
 echo ===
-echo make -j$cores $usermakeopt
-make -j$cores $usermakeopt
+echo make -j$cores $usermakeopt $maketarget
+make -j$cores $usermakeopt $maketarget
 
 echo
 echo ===
