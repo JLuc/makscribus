@@ -175,8 +175,8 @@ make -j$cores $usermakeopt $maketarget
 
 echo
 echo ===
-echo make install
-sudo make install
+echo make -j$cores install
+sudo make -j$cores install
 
 echo
 echo ===
