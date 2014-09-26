@@ -99,14 +99,12 @@ then
 	else dest="${2%.diff}.diff"
 	fi
 	
-	# echo ok on va mettre le diff dans $dest
 	echo Lets produce the diff in $dest
 	destroot="$dest"
 	dest="../$dest"
 
 	if [ -f  $dest ]; 
 	then
-		# echo "Effacement de $dest" 
 		echo "Deleting $dest" 
 		rm $dest
 	fi
@@ -115,12 +113,9 @@ then
 	then
 		cat $dest
 		echo "===="
-		# echo "Le diff a été mis dans $destroot"
 		echo "The diff was produced in $destroot"
 		geany $dest
 	else
-		# echo "! Le diff n'a PAS pu être mis dans $destroot !"
-		# echo "$dest n'a pas pu être produit alors voici en direct : "
 		echo "! The diff has NOT been put in $destroot !" 
 		echo "$dest could not be produced so here live"
 		echo "==== !"
@@ -138,6 +133,7 @@ then
 	echo
 	echo "Deleting the foregoing build objects." 
 	echo
+# Dont delete precious previous execs
 #	sudo rm -rf $execdirpath/scribus$suffix/*
 	sudo rm -rf ~/dev/scribus/build/$suffix/*
 	echo "~/dev/scribus/build/build$suffix was emptied --- it now contains :"
@@ -165,14 +161,13 @@ cd ../build/$suffix
 pwd
 echo cmake to $execdirpath/scribus$suffix with qtfullpath=$qtfullpath
 
-#  -DCMAKE_EXE_LINKER_FLAGS="-lQt5Quick -lQt5PrintSupport"
-# pour résoudre (?) :
+# -DCMAKE_EXE_LINKER_FLAGS="-lQt5Quick -lQt5PrintSupport"
+# is intended to fix errors when using Qt5.3.2 :
 # /usr/bin/ld: ne peut trouver -llibQt5PrintSupport
-# ou
 # /usr/bin/ld: CMakeFiles/scribus-1.5.0.svn.dir/ui/helpbrowser.cpp.o: référence au symbole non défini «_ZN12QPrintDialogC1EP8QPrinterP7QWidget»
 # /home/jluc/dev/Qt/Qt5.3.2/5.3/gcc_64/lib/libQt5PrintSupport.so: error adding symbols: DSO missing from command line
-echo cmake ../../svn -DCMAKE_INSTALL_PREFIX:PATH=$execdirpath/scribus$suffix  -DWANT_GUI_LANG="$mylang" -DWANT_VERSIONING=1 -DQT_PREFIX=$qtfullpath -DWANT_HUNSPELL=1 -DWANT_GRAPHICSMAGICK=1 -DWANT_SVNVERSION=1 -DCMAKE_EXE_LINKER_FLAGS='-lQt5Quick -lQt5PrintSupport'
-cmake ../../svn -DCMAKE_INSTALL_PREFIX:PATH=$execdirpath/scribus$suffix  -DWANT_GUI_LANG="$mylang" -DWANT_VERSIONING=1 -DQT_PREFIX=$qtfullpath -DWANT_HUNSPELL=1 -DWANT_GRAPHICSMAGICK=1 -DWANT_SVNVERSION=1 -DCMAKE_EXE_LINKER_FLAGS='-lQt5Quick -lQt5PrintSupport'
+echo cmake ../../svn -DCMAKE_INSTALL_PREFIX:PATH=$execdirpath/scribus$suffix  -DWANT_GUI_LANG="$mylang" -DWANT_VERSIONING=1 -DQT_PREFIX=$qtfullpath -DWANT_HUNSPELL=1 -DWANT_GRAPHICSMAGICK=1 -DWANT_SVNVERSION=1 -DCMAKE_EXE_LINKER_FLAGS="-lQt5Quick -lQt5PrintSupport"
+cmake ../../svn -DCMAKE_INSTALL_PREFIX:PATH=$execdirpath/scribus$suffix  -DWANT_GUI_LANG="$mylang" -DWANT_VERSIONING=1 -DQT_PREFIX=$qtfullpath -DWANT_HUNSPELL=1 -DWANT_GRAPHICSMAGICK=1 -DWANT_SVNVERSION=1 -DCMAKE_EXE_LINKER_FLAGS="-lQt5Quick -lQt5PrintSupport"
 
 echo
 echo ===
