@@ -165,8 +165,8 @@ cd ../build/$suffix
 pwd
 echo cmake to $execdirpath/scribus$suffix with qtfullpath=$qtfullpath
 
-echo cmake ../../svn -DCMAKE_INSTALL_PREFIX:PATH=$execdirpath/scribus$suffix  -DWANT_GUI_LANG="$mylang" -DWANT_VERSIONING=1 -DQT_PREFIX=$qtfullpath -DWANT_HUNSPELL=1 -DWANT_GRAPHICSMAGICK=1 -DWANT_SVNVERSION=1 -DCMAKE_EXE_LINKER_FLAGS='-lQt5Quick -lQt5PrintSupport'
-cmake ../../svn -DCMAKE_INSTALL_PREFIX:PATH=$execdirpath/scribus$suffix  -DWANT_GUI_LANG="$mylang" -DWANT_VERSIONING=1 -DQT_PREFIX=$qtfullpath -DWANT_HUNSPELL=1 -DWANT_GRAPHICSMAGICK=1 -DWANT_SVNVERSION=1 -DCMAKE_EXE_LINKER_FLAGS='-lQt5Quick -lQt5PrintSupport'
+echo cmake ../../svn -DCMAKE_INSTALL_PREFIX:PATH=$execdirpath/scribus$suffix  -DWANT_GUI_LANG="$mylang" -DWANT_VERSIONING=1 -DQT_PREFIX=$qtfullpath -DWANT_HUNSPELL=1 -DWANT_GRAPHICSMAGICK=1 -DWANT_SVNVERSION=1 -DCMAKE_EXE_LINKER_FLAGS="-L$qtfullpath/lib -lQt5Quick -lQt5PrintSupport"
+cmake      ../../svn -DCMAKE_INSTALL_PREFIX:PATH=$execdirpath/scribus$suffix  -DWANT_GUI_LANG="$mylang" -DWANT_VERSIONING=1 -DQT_PREFIX=$qtfullpath -DWANT_HUNSPELL=1 -DWANT_GRAPHICSMAGICK=1 -DWANT_SVNVERSION=1 -DCMAKE_EXE_LINKER_FLAGS="-L$qtfullpath/lib -lQt5Quick -lQt5PrintSupport"
 
 echo
 echo ===
