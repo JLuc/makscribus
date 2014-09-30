@@ -170,6 +170,11 @@ cmake      ../../svn -DCMAKE_INSTALL_PREFIX:PATH=$execdirpath/scribus$suffix  -D
 
 echo
 echo ===
+echo sudo chown -R $USER:$USER $sourcepath/build/$suffix
+sudo chown -R $USER:$USER $sourcepath/build/$suffix
+
+echo
+echo ===
 echo make -j$cores $usermakeopt $maketarget
 make -j$cores $usermakeopt $maketarget
 
