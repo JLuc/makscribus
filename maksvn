@@ -12,9 +12,8 @@
 sourcepath=~/dev/scribus
 
 # EDIT to fit your Qt install
-# qtpath="~/dev/Qt/Qt5.3/5.3"
-# qtpath="~/dev/Qt/Qt5.3.1/5.3"
-qtpath="~/dev/Qt/Qt5.3.2/5.3"
+qtpath="/localbin/Qt5.3.2/5.3"
+# qtpath="/localbin/Qt5.3.1/5.3"
 
 # Default could be execdirpath=~/bin 
 # but so it got chances to be on SSD, it goes to /locabin
@@ -31,40 +30,34 @@ cores=8
 # when suffix is 15svn, executable will be scribus15svn
 suffix=15svn
 
-# UNCOMMENT and EDIT if you wanna compile an old revision
+# Uncomment and edit to compile an old revision or to not update
+# OR use the -r 19232 option in the command line
 # todo : specify as an commandline option
-# revision=-r19507
+revision="" 					# for latest svn
+# revision=19507 				# to "update" to said revision
+# revision="nomaj" or "noup" 	# so as to prevent update
 
-# More options for make, including - (Ex : "-B")
+# More options for make, including -
 usermakeopt=""
+# usermakeopt="-B"
 
 # End of user editable part
 ####################################################"
 
 qtfullpath=$qtpath/gcc_64
 
-if [ "$revision" != "" ]
-	then 
-		echo
-		echo "!!!! BUILD REVISION $revision !!!!"  
-		echo
-fi
-
 if [ "$1" = "-?" ] || [ "$1" = "?" ] || [ "$1" = "-h" ] || [ "$1" = "h" ] || [ "$1" = "help" ] || [ "$1" = "-help" ]
-    then 	help="-h"
-fi
-
-if test "$help" = "-h";
 then
 	echo
-	echo "Usage : maksvn [-h]ou[-?] [-d]ou[clean] [-nomaj] [diff [dest]]"
+	echo "Usage : maksvn [-h]ou[-?] [diff [dest]] [-d]ou[clean] [-r #####] [-nomaj]"
 	echo "svn update the source and compile the 1.5"
 	echo 
-	echo === OPTIONS ====================
+	echo === OPTIONS ==================== the options order is important
 	echo "-h or -? display this help" 
-	echo "-d or clean: Deletes previous build files (not the execs)" 
-	echo "-noup or -nomaj : dont update to svn head"
-	echo "diff or -diff : creates the diff file 'dest.diff' (or 'svnhead.diff' when no dest filename is specified)"
+	echo "-diff or diff : creates the diff file 'dest.diff' (or 'svnhead.diff' when no dest filename is specified)"
+	echo "-d or clean : Deletes previous build files (not the execs)" 
+	echo "-r ##### : updates to old revision n°#####  (default : update to head)"
+	echo "-noup or -nomaj : dont update at all"
 	echo === INFOS ======================
 	svn info
 	exit
@@ -91,6 +84,7 @@ then
 	svn co svn://scribus.net/trunk/Scribus svn
 fi
 [ ! -d "svn" ] && echo "Error : no svn folder could be created" &&	exit
+
 cd svn
 pwd
 
@@ -146,17 +140,36 @@ then
 	echo
 fi
 
+if [ "$1" = "-r" ]
+then 
+	if [ "$2" = "" ]
+	then
+		echo Error : revision missing after -r
+		exit
+	fi
+	revision=$2
+	shift
+	shift
+fi
+
 if [ "$1" = "-noup" ] || [ "$1" = "-nomaj" ]
 then
 	shift
+	revision="noup"
+fi
+
+if [ "$revision" = "noup" ] || [ "$revision" = "nomaj" ]
+then
+ 	echo "NOT updating svn update"
+elif [ "$revision" != "" ]
+then 
 	echo
-	echo "NOT updating svn update"
-	echo
+	echo "! Updating to revision $revision !"  
+	svn update -r $revision
 else
 	echo
-	echo "Updating to svn $revision" 
-	svn update $revision
-	echo
+	echo "Updating to svn" 
+	svn update
 fi
 
 echo
@@ -166,10 +179,8 @@ pwd
 echo cmake to $execdirpath/scribus$suffix with qtfullpath=$qtfullpath
 
 echo cmake ../../svn -DCMAKE_INSTALL_PREFIX:PATH=$execdirpath/scribus$suffix  -DWANT_GUI_LANG="$mylang" -DWANT_VERSIONING=1 -DQT_PREFIX=$qtfullpath -DWANT_HUNSPELL=1 -DWANT_GRAPHICSMAGICK=1 -DWANT_SVNVERSION=1 -DCMAKE_EXE_LINKER_FLAGS="-L$qtfullpath/lib -lQt5Quick -lQt5PrintSupport"
-cmake      ../../svn -DCMAKE_INSTALL_PREFIX:PATH=$execdirpath/scribus$suffix  -DWANT_GUI_LANG="$mylang" -DWANT_VERSIONING=1 -DQT_PREFIX=$qtfullpath -DWANT_HUNSPELL=1 -DWANT_GRAPHICSMAGICK=1 -DWANT_SVNVERSION=1 -DCMAKE_EXE_LINKER_FLAGS="-L$qtfullpath/lib -lQt5Quick -lQt5PrintSupport"
+cmake ../../svn -DCMAKE_INSTALL_PREFIX:PATH=$execdirpath/scribus$suffix  -DWANT_GUI_LANG="$mylang" -DWANT_VERSIONING=1 -DQT_PREFIX=$qtfullpath -DWANT_HUNSPELL=1 -DWANT_GRAPHICSMAGICK=1 -DWANT_SVNVERSION=1 -DCMAKE_EXE_LINKER_FLAGS="-L$qtfullpath/lib -lQt5Quick -lQt5PrintSupport"
 
-echo
-echo ===
 echo sudo chown -R $USER:$USER $sourcepath/build/$suffix
 sudo chown -R $USER:$USER $sourcepath/build/$suffix
 
