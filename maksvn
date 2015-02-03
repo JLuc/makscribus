@@ -5,7 +5,7 @@
 # has various inline options to EDIT to fit your environnement
 
 # sourcepath, qt library and destination folders can be set to user conveninence
-# but sourcepath will later contain both the 'svn' subfolder and the 'build' subfolder
+# Note : sourcepath will later contain both the 'svn' subfolder and the 'build' subfolder
 # ('svn' receives svn repo clone, 'build' receive build objects)
 
 # Set to user convenience
@@ -132,7 +132,7 @@ then
 	echo
 	echo "Deleting the foregoing build objects." 
 	sudo rm -rf $sourcepath/build/$suffix/*
-	echo "$sourcepath/build/build$suffix was emptied --- it now contains :"
+	echo "$sourcepath/build/$suffix was emptied --- it now contains :"
 	ls $sourcepath/build/$suffix
 	echo
 # Dont delete precious previous execs
