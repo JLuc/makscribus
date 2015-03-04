@@ -11,16 +11,15 @@
 # Note : sourcepath will later contain both the 'svn' subfolder and the 'build' subfolder
 # ('svn' receives svn repo clone, 'build' receive build objects)
 
-# Set to user convenience
+# Set to user convenience. Contains svn folder
 sourcepath=~/dev/scribus
 
 # EDIT to fit your Qt install
 qtpath="/localbin/Qt5.3.2/5.3"
 # qtpath="/localbin/Qt5.3.1/5.3"
 
-# Default could be execdirpath=~/bin 
-# but so it got chances to be on SSD, it goes to /locabin
-# EDIT to fit your exec folder
+# IMPORTANT : EDIT to fit your exec folder
+# Default could be execdirpath=~/bin but so it got chances to be on SSD, it goes here to /locabin
 execdirpath=/localbin
 
 # EDIT to fit your langage
