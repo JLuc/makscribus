@@ -4,6 +4,9 @@
 # has command line options for really clean build, creating diffs and for svn update
 # has various inline options to EDIT to fit your environnement
 
+# You first have to install Qt5.4 and all used dev libraries (libdrm-dev, libgl1-mesa-dev, libxml2-dev, libzip-dev, libfreetype6-dev, liblcms2-dev, libpodofo-dev, libcairo2-dev, libmagick++dev (maybe useless), libgraphicsmagick++1-dev, libcups2-dev, libpython2.7-dev, libpoppler-qt5-dev (maybe useless), libpoppler-cpp-dev, libhunspell-dev) 
+# see http://wiki.scribus.net/canvas/Building_SVN_versions_with_CMake#Ubuntu for more details
+
 # sourcepath, qt library and destination folders can be set to user conveninence
 # Note : sourcepath will later contain both the 'svn' subfolder and the 'build' subfolder
 # ('svn' receives svn repo clone, 'build' receive build objects)
