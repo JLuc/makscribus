@@ -4,22 +4,19 @@
 # has command line options for really clean build, creating diffs and for svn update
 # has various inline options to EDIT to fit your environnement
 
-# You first have to install Qt5.4 and all used dev libraries (libdrm-dev, libgl1-mesa-dev, libxml2-dev, libzip-dev, libfreetype6-dev, liblcms2-dev, libpodofo-dev, libcairo2-dev, libmagick++dev (maybe useless), libgraphicsmagick++1-dev, libcups2-dev, libpython2.7-dev, libpoppler-qt5-dev (maybe useless), libpoppler-cpp-dev, libhunspell-dev) 
-# see http://wiki.scribus.net/canvas/Building_SVN_versions_with_CMake#Ubuntu for more details
-
 # sourcepath, qt library and destination folders can be set to user conveninence
-# Note : sourcepath will later contain both the 'svn' subfolder and the 'build' subfolder
+# but sourcepath will later contain both the 'svn' subfolder and the 'build' subfolder
 # ('svn' receives svn repo clone, 'build' receive build objects)
 
-# Set to user convenience. Contains svn folder
+# Set to user convenience
 sourcepath=~/dev/scribus
 
 # EDIT to fit your Qt install
-qtpath="/localbin/Qt5.3.2/5.3"
-# qtpath="/localbin/Qt5.3.1/5.3"
+qtpath="/localbin/Qt5.4/5.4"
 
-# IMPORTANT : EDIT to fit your exec folder
-# Default could be execdirpath=~/bin but so it got chances to be on SSD, it goes here to /locabin
+# Default could be execdirpath=~/bin 
+# but so it got chances to be on SSD, it goes to /locabin
+# EDIT to fit your exec folder
 execdirpath=/localbin
 
 # EDIT to fit your langage
@@ -29,7 +26,7 @@ mylang="fr;en-us"
 cores=8
 
 # EDIT postfix for executable
-# when suffix is 15svn, executable will be scribus15svn
+# for example : when suffix is 15svn, executable will be scribus15svn
 suffix=15svn
 
 # Uncomment and edit to compile an old revision or to not update
@@ -39,9 +36,11 @@ revision="" 					# for latest svn
 # revision=19507 				# to "update" to said revision
 # revision="nomaj" or "noup" 	# so as to prevent update
 
-# More options for make, including -
+# More options for cmake. Do include the -
+usercmakeopt=" -DWANT_DEBUG=1 "
+
+# More options for make. Do include the -
 usermakeopt=""
-# usermakeopt="-B"
 
 # End of user editable part
 ####################################################"
@@ -180,11 +179,12 @@ cd ../build/$suffix
 pwd
 echo cmake to $execdirpath/scribus$suffix with qtfullpath=$qtfullpath
 
-echo cmake ../../svn -DCMAKE_INSTALL_PREFIX:PATH=$execdirpath/scribus$suffix  -DWANT_GUI_LANG="$mylang" -DWANT_VERSIONING=1 -DQT_PREFIX=$qtfullpath -DWANT_HUNSPELL=1 -DWANT_GRAPHICSMAGICK=1 -DWANT_SVNVERSION=1 -DCMAKE_EXE_LINKER_FLAGS="-L$qtfullpath/lib -lQt5Quick -lQt5PrintSupport"
-cmake ../../svn -DCMAKE_INSTALL_PREFIX:PATH=$execdirpath/scribus$suffix  -DWANT_GUI_LANG="$mylang" -DWANT_VERSIONING=1 -DQT_PREFIX=$qtfullpath -DWANT_HUNSPELL=1 -DWANT_GRAPHICSMAGICK=1 -DWANT_SVNVERSION=1 -DCMAKE_EXE_LINKER_FLAGS="-L$qtfullpath/lib -lQt5Quick -lQt5PrintSupport"
+echo cmake ../../svn $usercmakeopt -DCMAKE_INSTALL_PREFIX:PATH=$execdirpath/scribus$suffix  -DWANT_GUI_LANG="$mylang" -DWANT_VERSIONING=1 -DQT_PREFIX=$qtfullpath -DWANT_HUNSPELL=1 -DWANT_GRAPHICSMAGICK=1 -DWANT_SVNVERSION=1 -DCMAKE_EXE_LINKER_FLAGS="-L$qtfullpath/lib -lQt5Quick -lQt5PrintSupport"
+cmake ../../svn $usercmakeopt -DCMAKE_INSTALL_PREFIX:PATH=$execdirpath/scribus$suffix  -DWANT_GUI_LANG="$mylang" -DWANT_VERSIONING=1 -DQT_PREFIX=$qtfullpath -DWANT_HUNSPELL=1 -DWANT_GRAPHICSMAGICK=1 -DWANT_SVNVERSION=1 -DCMAKE_EXE_LINKER_FLAGS="-L$qtfullpath/lib -lQt5Quick -lQt5PrintSupport"
 
 echo sudo chown -R $USER:$USER $sourcepath/build/$suffix
 sudo chown -R $USER:$USER $sourcepath/build/$suffix
+# sudo chmod u+rwx /usr/local/src 
 
 echo
 echo ===
@@ -200,6 +200,8 @@ echo
 echo ===
 
 sudo unlink /usr/bin/scribus$suffix
-sudo ln -s $execdirpath/scribus$suffix/bin/scribus-1.5.0.svn /usr/bin/scribus$suffix
-echo exec is $execdirpath/scribus$suffix/bin/scribus-1.5.0.svn
+# sudo ln -s $execdirpath/scribus$suffix/bin/scribus-1.5.0.svn /usr/bin/scribus$suffix
+# echo exec is $execdirpath/scribus$suffix/bin/scribus-1.5.0.svn
+sudo ln -s $execdirpath/scribus$suffix/bin/scribus-1.5.0 /usr/bin/scribus$suffix
+echo exec is $execdirpath/scribus$suffix/bin/scribus-1.5.0
 echo Run with scribus$suffix
