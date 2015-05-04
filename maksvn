@@ -204,5 +204,8 @@ echo ===
 
 sudo unlink /usr/bin/scribus$suffix
 sudo ln -s $execdirpath/scribus$suffix/bin/$makeexecname /usr/bin/scribus$suffix
+
+cd ../../svn
+echo "SVN version" `svnversion`
 echo exec is $execdirpath/scribus$suffix/bin/$makeexecname
 echo Run with scribus$suffix
