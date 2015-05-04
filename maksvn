@@ -19,6 +19,9 @@ qtpath="/localbin/Qt5.4/5.4"
 # EDIT to fit your exec folder
 execdirpath=/localbin
 
+# Once was scribus-1.5.0.svn but changed due to 1.5 approaching release
+createdexec="scribus-1.5.0"
+
 # EDIT to fit your langage
 mylang="fr;en-us"
 
@@ -202,6 +205,6 @@ echo ===
 sudo unlink /usr/bin/scribus$suffix
 # sudo ln -s $execdirpath/scribus$suffix/bin/scribus-1.5.0.svn /usr/bin/scribus$suffix
 # echo exec is $execdirpath/scribus$suffix/bin/scribus-1.5.0.svn
-sudo ln -s $execdirpath/scribus$suffix/bin/scribus-1.5.0 /usr/bin/scribus$suffix
-echo exec is $execdirpath/scribus$suffix/bin/scribus-1.5.0
+sudo ln -s $execdirpath/scribus$suffix/bin/$createdexec /usr/bin/scribus$suffix
+echo exec is $execdirpath/scribus$suffix/bin/$createdexec
 echo Run with scribus$suffix
