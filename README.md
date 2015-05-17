@@ -52,11 +52,3 @@ Other script :
 * required ? offer other linux 'flavor' options...(involves mostly fine-tuning library installs)
 * checkout and update plugin from github and compile ? (for ex https://github.com/aoloe/scribus-plugin-export-epub)
 
-Done june 2014 :
-* inline parameters for produced bin UI lang and nb of CPU cores compile
-* force ~/dev/scribus as initial folder for sources and build, create it when needed
-* init the svn checkout
-* English spoken
-
-Done Oct 2014
-* more : see logs !
