@@ -5,7 +5,7 @@ Current scripts are _maksvn_ and _makgit_.
   
 #### Currently runs on:
 <!-- [ ] Ubuntu 14.10 -->
-- [ ] Ubuntu 14.04
+- [x] Ubuntu 14.04
 - [x] Ubuntu 13.10
 
 
