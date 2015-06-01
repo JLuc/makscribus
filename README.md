@@ -39,13 +39,12 @@ Folder structure is the same with name of leaf folder depending on git branch
 
 # Todo
 
-Improve :
-* command line options instead of EDIT inline values for revision number option*
-* use getopts to parse CLI options
+* option to make 1.5.0 released version without having to mention to commit number
 
 Maybe :
 * preliminary checks to see if svn + gcc + cmake etc packages are installed
 * add il8n functionality (translate the script prompts to other languages) [[Discussion]](https://github.com/JLuc/makscribus/issues/2)
+* use getopts to parse CLI options
 
 Other script :
 * install libraries and svn + compilers when required
