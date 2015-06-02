@@ -1,5 +1,7 @@
 #!/bin/sh
-
+# Author : JLuc https://github.com/JLuc for Passerelle Eco magazine www.passerelleco.info
+# Licence : GPL
+# 
 # maksvn script creates folders for out of source build 
 # has command line options for really clean build, creating diffs and for svn update
 # has various inline options to EDIT to fit your environnement
