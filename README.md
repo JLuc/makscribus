@@ -18,9 +18,8 @@ Folders can be changed in editing the settings inside the file at its begining.
 | :-------- | :----- | :----- |
 | ~/dev/scribus             | main working directory and place for .diff files | sourcepath |
 | ~/dev/scribus/svn         | svn source files    | |
-| ~/dev/scribus/build/$suffix | for build files | suffix defaults to 15svn) |
-| $execdirpath/$suffix               | for results of compile | execdirpath defaults to /localbin/15svn) |
-| $sourcepath/build/$suffix | for build files         | |
+| $sourcepath/build/$suffix | for build files     | | suffix defaults to 15svn |
+| $execdirpath/$suffix      | for results of compile | execdirpath defaults to /localbin/15svn |
 
 #### Basic use
 
