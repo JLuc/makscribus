@@ -1,15 +1,14 @@
 makscribus
 ==========
-Scripts which make and install Bleeding-Edge Scribus versions.  
+Scripts which update, make and install bleeding-edge Scribus svn versions and provide various features.
 Current scripts are _maksvn_ and _makgit_.  
   
-#### Currently runs on:
+#### Currently tested runs on:
 <!-- [ ] Ubuntu 14.10 -->
 - [x] Ubuntu 14.04
 - [x] Ubuntu 13.10
 
-
-The folder structure that the scripts use:
+The folder structure that the scripts uses :
 
 |Directory |Reason  |
 | :-------- | :----- |
@@ -29,6 +28,21 @@ Folder structure is :
 | ~/dev/scribus/build/15svn | for build files         |
 | ~/dev/scribus/svn         | for svn source files    |
 | ~/dev/scribus             | as main working directory and place for .diff |
+
+#### Basic use
+
+Plain `maksvn` updates the source to svn head (currently 1.5.1svn), compiles and installs it
+
+#### Options
+Various options enhances the use. the options order is important.
+
+```maksvn [-h]ou[-?] [diff [dest]] [-d]ou[clean] [-r #####] [-nomaj]```
+
+* -h or -? display this help
+* -diff or diff : creates the diff file 'dest.diff' (or 'svnhead.diff' when no dest filename is specified) of the current files state, when they have been localy edited, agains the svn head.
+* -d or clean : Deletes previous build files (not the execs)
+* -r ##### : updates to old revision n°#####  (default : update to head)
+* -noup or -nomaj : dont update at all, but make and install
 
 ### ~~makgit~~
 _out of order due to lack of activity on the contributor's repo_
