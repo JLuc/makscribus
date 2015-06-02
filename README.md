@@ -14,16 +14,6 @@ Using Subversion: update to trunk svn head and make scribus 1.5
 
 Folders can be changed in editing the settings inside the file at its begining.
 
-|Directory |Reason  | setting variable name |
-| :-------- | :----- | :----- |
-| ~/dev/scribus             | main working directory and place for .diff files | sourcepath |
-| ~/dev/scribus/svn         | svn source files    | |
-| $sourcepath/build/$suffix | for build files     | | suffix defaults to 15svn |
-| $execdirpath/$suffix      | for results of compile | execdirpath defaults to /localbin/15svn |
-| $qtpath | path for Qt | /localbin/Qt5.4/5.4 |
-
-When the script is launched, it creates some of these folders it case they dont exist.
-
 #### Basic use
 
 Plain `maksvn` updates the source to svn head (currently 1.5.1svn), compiles and installs it
@@ -59,6 +49,17 @@ Here are their name and défault values :
   - `revision="nomaj"` or `"noup"`  : no update at all, will compile source "as is" 
 * `usercmakeopt=" -DWANT_DEBUG=1 "` : More optionnal settings for cmake. Do include the -
 * `usermakeopt=""` : More optionnal settings for make. Do include the -
+
+
+|Directory Reason  | default value | setting variable name |
+| :-------- | :----- | :----- |
+| main working directory and place for .diff files | ~/dev/scribus             | sourcepath |
+| svn source files    | ~/dev/scribus/svn          | $sourcepath/svn |
+| build files     |  ~/dev/scribus/15svn | $sourcepath/build/$suffix |
+| for results of compile |  /localbin/15svn | $execdirpath/$suffix |
+| path for Qt | /localbin/Qt5.4/5.4 |  $qtpath |
+
+When the script is launched, it creates some of these folders in case they dont exist.
 
 ### ~~makgit~~
 _out of order due to lack of activity on the contributor's repo_
