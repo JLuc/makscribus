@@ -59,7 +59,7 @@ Here are their name and défault values :
 | for results of compile |  /localbin/15svn | $execdirpath/$suffix |
 | path for Qt | /localbin/Qt5.4/5.4 |  $qtpath |
 
-When the script is launched, it creates some of these folders in case they dont exist.
+When the script is launched, it creates the scribus related folders in case they dont exist, but not the qtpath : Qt has to be installed first, and the script checks it is installed in the said place.
 
 ### ~~makgit~~
 _out of order due to lack of activity on the contributor's repo_
