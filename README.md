@@ -20,7 +20,7 @@ The folder structure that the scripts uses :
 
 Using Subversion: update to trunk svn head and make scribus 1.5
 
-Folder structure is :
+Default folder structure is :
 
 |Directory |Reason |
 | :-------- | :----- |
@@ -28,6 +28,8 @@ Folder structure is :
 | ~/dev/scribus/build/15svn | for build files         |
 | ~/dev/scribus/svn         | for svn source files    |
 | ~/dev/scribus             | as main working directory and place for .diff |
+
+Folders can be changed in editing the settings inside the file at its begining.
 
 #### Basic use
 
@@ -44,6 +46,27 @@ Various options enhances the use. the options order is important.
 * -r ##### : updates to old revision n°#####  (default : update to head)
 * -noup or -nomaj : dont update at all, but make and install
 
+#### Settings
+
+Other settings require to edit the file and change their default values.
+
+You MUST have a look at them and change their value before launching the script, or create the folder structure according to them.
+
+Here are their name and défault values :
+* sourcepath=~/dev/scribus
+* qtpath="/localbin/Qt5.4/5.4"
+* execdirpath=/localbin
+* makeexecname="scribus-1.5.0" # Once was scribus-1.5.0.svn but changed due to 1.5 approaching release. Might be edited for 1.5.1svn
+* mylang="fr;en-us" # EDIT to fit your langage !!
+* cores=8 # fit your cpu cores = possible parallel processes
+* suffix=15svn # postfix for executable. For example : when suffix is 15svn, executable will be scribus15svn
+* ```revision="" 					# for latest svn
+  revision=19507 				# to "update" to said revision``` 
+Uncomment and edit to compile an old revision or to not update OR use the -r 19232 option in the command line
+* revision="nomaj" or "noup" 	# so as to prevent update
+* usercmakeopt=" -DWANT_DEBUG=1 " # More options for cmake. Do include the -
+* usermakeopt="" # More options for make. Do include the -
+
 ### ~~makgit~~
 _out of order due to lack of activity on the contributor's repo_
 
@@ -53,7 +76,7 @@ Folder structure is the same with name of leaf folder depending on git branch
 
 # Todo
 
-* option to make 1.5.0 released version without having to mention to commit number
+* option to make 1.5.0 released version without having to mention the revision number
 
 Maybe :
 * preliminary checks to see if svn + gcc + cmake etc packages are installed
