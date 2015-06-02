@@ -8,28 +8,19 @@ Current scripts are _maksvn_ and _makgit_.
 - [x] Ubuntu 14.04
 - [x] Ubuntu 13.10
 
-The folder structure that the scripts uses :
-
-|Directory |Reason  |
-| :-------- | :----- |
-| ~/dev/scribus/build/subfolder | for build files |
-| ~/bin/subfolder               | for results of compile |
-| ~/dev/scribus/svn or git      | for source files |
-
 ### maksvn
 
 Using Subversion: update to trunk svn head and make scribus 1.5
 
-Default folder structure is :
-
-|Directory |Reason |
-| :-------- | :----- |
-| ~/bin/scribus15svn        | for results of compile  |
-| ~/dev/scribus/build/15svn | for build files         |
-| ~/dev/scribus/svn         | for svn source files    |
-| ~/dev/scribus             | as main working directory and place for .diff |
-
 Folders can be changed in editing the settings inside the file at its begining.
+
+|Directory |Reason  | setting variable name |
+| :-------- | :----- | :----- |
+| ~/dev/scribus             | main working directory and place for .diff files | sourcepath |
+| ~/dev/scribus/svn         | svn source files    | |
+| ~/dev/scribus/build/$suffix | for build files | suffix defaults to 15svn) |
+| $execdirpath/$suffix               | for results of compile | execdirpath defaults to /localbin/15svn) |
+| $sourcepath/build/$suffix | for build files         | |
 
 #### Basic use
 
@@ -53,19 +44,19 @@ Other settings require to edit the file and change their default values.
 You MUST have a look at them and change their value before launching the script, or create the folder structure according to them.
 
 Here are their name and défault values :
-* sourcepath=~/dev/scribus
-* qtpath="/localbin/Qt5.4/5.4"
-* execdirpath=/localbin
-* makeexecname="scribus-1.5.0" # Once was scribus-1.5.0.svn but changed due to 1.5 approaching release. Might be edited for 1.5.1svn
-* mylang="fr;en-us" # EDIT to fit your langage !!
-* cores=8 # fit your cpu cores = possible parallel processes
-* suffix=15svn # postfix for executable. For example : when suffix is 15svn, executable will be scribus15svn
-* ```revision="" 					# for latest svn
-  revision=19507 				# to "update" to said revision``` 
-Uncomment and edit to compile an old revision or to not update OR use the -r 19232 option in the command line
-* revision="nomaj" or "noup" 	# so as to prevent update
-* usercmakeopt=" -DWANT_DEBUG=1 " # More options for cmake. Do include the -
-* usermakeopt="" # More options for make. Do include the -
+* `sourcepath=~/dev/scribus`
+* `qtpath="/localbin/Qt5.4/5.4"`
+* `execdirpath=/localbin`
+* `makeexecname="scribus-1.5.0"` : Once was scribus-1.5.0.svn but changed due to 1.5 approaching release. Might be edited for 1.5.1svn
+* `mylang="fr;en-us"` : Edit to fit your langage !!
+* `cores=8` : edit to fit your cpu cores = compile is much quicker with parallel processes enabled
+* `suffix=15svn` : postfix for executable. For example : when postfix is 15svn, executable will be scribus15svn
+* `revision` setting sets the default revision for update and can be overwriten with command line option
+  - `revision=""` : to update to latest svn
+  - `revision=19507` : to "update" to said revision``` 
+  - `revision="nomaj"` or `"noup"`  : no update at all, will compile source "as is" 
+* `usercmakeopt=" -DWANT_DEBUG=1 "` : More optionnal settings for cmake. Do include the -
+* `usermakeopt=""` : More optionnal settings for make. Do include the -
 
 ### ~~makgit~~
 _out of order due to lack of activity on the contributor's repo_
