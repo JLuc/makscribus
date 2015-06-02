@@ -20,6 +20,9 @@ Folders can be changed in editing the settings inside the file at its begining.
 | ~/dev/scribus/svn         | svn source files    | |
 | $sourcepath/build/$suffix | for build files     | | suffix defaults to 15svn |
 | $execdirpath/$suffix      | for results of compile | execdirpath defaults to /localbin/15svn |
+| $qtpath | path for Qt | /localbin/Qt5.4/5.4 |
+
+When the script is launched, it creates some of these folders it case they dont exist.
 
 #### Basic use
 
