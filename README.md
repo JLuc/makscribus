@@ -51,7 +51,7 @@ Here are their name and défault values :
 * `usermakeopt=""` : More optionnal settings for make. Do include the -
 
 
-|Directory Reason  | default value | setting variable name |
+|Directory use  | default value | setting variable name |
 | :-------- | :----- | :----- |
 | main working directory and place for .diff files | ~/dev/scribus             | sourcepath |
 | svn source files    | ~/dev/scribus/svn          | $sourcepath/svn |
