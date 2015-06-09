@@ -1,14 +1,17 @@
 #!/bin/sh
-# Author : JLuc https://github.com/JLuc for Passerelle Eco magazine www.passerelleco.info
-# Licence : GPL
-# 
+
+#
 # maksvn script creates folders for out of source build 
 # has command line options for really clean build, creating diffs and for svn update
 # has various inline options to EDIT to fit your environnement
-
-# sourcepath, qt library and destination folders can be set to user conveninence
-# sourcepath will later contain both the 'svn' subfolder and the 'build' subfolder :
-# 'svn' receives svn repo clone, 'build' receive build objects
+#
+# Sourcepath, qt library and destination folders can be set to user conveninence
+# but sourcepath will later contain both the 'svn' subfolder and the 'build' subfolder
+# ('svn' receives svn repo clone, 'build' receive build objects)
+#
+# Author : JLuc, for Passerelle Eco - www.passerelleco.info
+# Licence : GPL
+#
 
 # Set to user convenience
 sourcepath=~/dev/scribus
@@ -21,8 +24,9 @@ qtpath="/localbin/Qt5.4/5.4"
 # EDIT to fit your exec folder
 execdirpath=/localbin
 
-# Once was scribus-1.5.0.svn but changed due to 1.5 approaching release
-makeexecname="scribus-1.5.0"
+# DONT Edit but keep synced : it must reflect the make process result. Probably depends on makefile.
+# Once was "scribus-1.5.0.svn" but changed to "scribus-1.5.0" when 1.5  release was approaching
+makeexecname="scribus-1.5.1.svn"
 
 # EDIT to fit your langage
 mylang="fr;en-us"
@@ -30,16 +34,25 @@ mylang="fr;en-us"
 # EDIT to fit your cpu cores = possible parallel processes
 cores=8
 
-# EDIT postfix for executable
-# for example : when suffix is 15svn, executable will be scribus15svn
-suffix=15svn
-
 # Uncomment and edit to compile an old revision or to not update
 # OR use the -r 19232 option in the command line
 # todo : specify as an commandline option
 revision="" 					# for latest svn
 # revision=19507 				# to "update" to said revision
 # revision="nomaj" or "noup" 	# so as to prevent update
+
+if [ "$1" = "1.5" ] || [ "$1" = "15" ]
+then
+	shift
+# preset config for scribus 1.5 unstable final release
+	suffix=15
+	makeexecname="scribus-1.5.0"
+	revision=20099
+else
+# EDIT Sufffix for executable
+# for example : when suffix is 151svn, executable will be scribus151svn
+	suffix=151svn
+fi
 
 # More options for cmake. Do include the -
 usercmakeopt=" -DWANT_DEBUG=1 "
@@ -55,15 +68,18 @@ qtfullpath=$qtpath/gcc_64
 if [ "$1" = "-?" ] || [ "$1" = "?" ] || [ "$1" = "-h" ] || [ "$1" = "h" ] || [ "$1" = "help" ] || [ "$1" = "-help" ]
 then
 	echo
-	echo "Usage : maksvn [-h]ou[-?] [diff [dest]] [-d]ou[clean] [-r #####] [-nomaj]"
-	echo "svn update the source and compile the 1.5"
-	echo 
+	echo "Usage : maksvn [15]or[1.5] [-h]or[-?] [diff [dest]] [-d]ou[clean] [-r #####] [-nomaj]"
+	echo "with '15' option : svn fetch svn version for scribus 1.5 final unstable version and compiles it"
+	echo "else : svn update the source and compile the 1.5.1svn scribus version"
+	echo
 	echo === OPTIONS ==================== the options order is important
+	echo "15 : compiles final unstable version"
 	echo "-h or -? display this help" 
 	echo "-diff or diff : creates the diff file 'dest.diff' (or 'svnhead.diff' when no dest filename is specified)"
 	echo "-d or clean : Deletes previous build files (not the execs)" 
 	echo "-r ##### : updates to old revision n°#####  (default : update to head)"
 	echo "-noup or -nomaj : dont update at all"
+	echo
 	echo === INFOS ======================
 	svn info
 	exit
@@ -172,7 +188,7 @@ then
 	echo
 	echo "! Updating to revision $revision !"  
 	svn update -r $revision
-else
+else	
 	echo
 	echo "Updating to svn" 
 	svn update
