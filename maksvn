@@ -68,7 +68,7 @@ qtfullpath=$qtpath/gcc_64
 if [ "$1" = "-?" ] || [ "$1" = "?" ] || [ "$1" = "-h" ] || [ "$1" = "h" ] || [ "$1" = "help" ] || [ "$1" = "-help" ]
 then
 	echo
-	echo "Usage : maksvn [15]or[1.5] [-h]or[-?] [diff [dest]] [-d]ou[clean] [-r #####] [-nomaj]"
+	echo "Usage : maksvn [1.5]or[-1.5] [-h]or[-?] [diff [dest]] [-d]ou[clean] [-r #####] [-nomaj]"
 	echo "with '15' option : svn fetch svn version for scribus 1.5 final unstable version and compiles it"
 	echo "else : svn update the source and compile the 1.5.1svn scribus version"
 	echo
