@@ -70,7 +70,7 @@ Folder structure is the same with name of leaf folder depending on git branch
 
 # Todo
 
-* option to make 1.5.0 released version without having to mention the revision number
+* DONE option to make 1.5.0 released version without having to mention the revision number
 
 Maybe :
 * preliminary checks to see if svn + gcc + cmake etc packages are installed
