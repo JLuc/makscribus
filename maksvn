@@ -36,7 +36,6 @@ cores=8
 
 # Uncomment and edit to compile an old revision or to not update
 # OR use the -r 19232 option in the command line
-# todo : specify as an commandline option
 revision="" 					# for latest svn
 # revision=19507 				# to "update" to said revision
 # revision="nomaj" or "noup" 	# so as to prevent update
