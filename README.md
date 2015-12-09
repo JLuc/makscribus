@@ -1,14 +1,15 @@
-makscribus
-==========
 Scripts which update, make and install bleeding-edge Scribus svn versions and provide various features.
 Current scripts are _maksvn_ and _makgit_.  
-  
-#### Currently tested runs on:
-<!-- [ ] Ubuntu 14.10 -->
-- [x] Ubuntu 14.04
-- [x] Ubuntu 13.10
 
-### maksvn
+# maksvn
+
+Script runs in linux terminal.
+
+#### Currently tested runs on:
+- [x] Ubuntu 14.04 (tested by JLuc, Dec 2015)
+- [x] Ubuntu 13.10 (tested by JLuc, Dec 2013)
+- [x] slackware 14.1 (tested by John Culletin, Dec 2015)
+
 
 Using Subversion: update to trunk svn head and make scribus 1.5
 
