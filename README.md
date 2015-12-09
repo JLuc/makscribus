@@ -13,7 +13,7 @@ Folders can be changed in editing the settings inside the file at its begining.
 #### Currently tested runs on:
 - [x] Ubuntu 14.04 (tested by JLuc, Dec 2015)
 - [x] Ubuntu 13.10 (tested by JLuc, Dec 2013)
-- [x] slackware 14.1 (tested by John Culletin, Dec 2015)
+- [x] slackware 14.1 (tested by John Culleton, Dec 2015)
 
 
 #### Basic use
