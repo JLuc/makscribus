@@ -3,7 +3,7 @@ Current scripts are _maksvn_ and _makgit_.
 
 # maksvn
 
-Using Subversion: update to trunk svn head and make scribus 1.5
+Using Subversion: update to trunk svn head or to any other revision, and make scribus 1.5 or 1.5.1
 
 Folders can be changed in editing the settings inside the file at its begining.
 - path to Qt
