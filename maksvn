@@ -1,13 +1,14 @@
 #!/bin/sh
+
 #
 # maksvn script creates folders for out of source build 
 # has command line options for really clean build, creating diffs and for svn update
 # has various inline options to EDIT to fit your environnement
 #
 # Sourcepath, qt library and destination folders can be set to user conveninence
-# note : sourcepath will later contain both the 'svn' subfolder and the 'build' subfolder
-#        'svn' folder receives svn repo clone, 'build' receive build objects
-# 
+# but sourcepath will later contain both the 'svn' subfolder and the 'build' subfolder
+# ('svn' receives svn repo clone, 'build' receive build objects)
+#
 # Author : JLuc, for Passerelle Eco - www.passerelleco.info
 # Licence : GPL
 #
@@ -42,17 +43,25 @@ cores=8
 # Note : revision=noup is the same as -noup option
 revision="" 					# for latest svn
 
+# EDIT Suffix for executable
+# for example : when suffix is 151svn, executable will be scribus151svn
+# first command line specifies nickname for release to compile and related suffix
 if [ "$1" = "1.5" ] || [ "$1" = "15" ] || [ "$1" = "-1.5" ] || [ "$1" = "-15" ]
 then
-	shift
 # preset config for scribus 1.5 unstable final release
+	shift
 	suffix=15
 	makeexecname="scribus-1.5.0"
 	revision=20099
-else
-# EDIT Sufffix for executable
-# for example : when suffix is 151svn, executable will be scribus151svn
-	suffix=152svn
+else if [ "$1" = "boxes" ] || [ "$1" = "-boxes" ]
+	then
+		shift
+		suffix=boxes
+		#revision = svn head
+	else 
+		suffix=ok
+		revision=21098
+	fi
 fi
 
 # More options for cmake. Do include the -
@@ -69,17 +78,19 @@ qtfullpath=$qtpath/gcc_64
 if [ "$1" = "-?" ] || [ "$1" = "?" ] || [ "$1" = "-h" ] || [ "$1" = "h" ] || [ "$1" = "help" ] || [ "$1" = "-help" ]
 then
 	echo
-	echo "Usage : maksvn [15]or[1.5] [-h]or[-?] [diff [dest]] [-d]ou[clean] [-r #####] [-nomaj]"
-	echo "with '15' option : svn fetch svn version for scribus 1.5 final unstable version and compiles it"
-	echo "else : svn update the source and compile the head master svn scribus version"
-	echo
+	echo "Usage : maksvn ([15] or [boxes] or nothing) [-h]or[-?] [diff [dest]] [-d]ou[clean] [-r #####] [-nomaj]"
 	echo === OPTIONS ==================== the options order is important
-	echo "15 : compiles final unstable version"
+	echo "compiled svn version :"
+	echo "with '15' : svn version for scribus 1.5.0 final unstable version is compiled"
+	echo "with 'boxes' option : WARNING svn fetches svn head including boxes patch toward CTL : UNTESTED VERSION"
+	echo "else : svn update the source and compile the latest 1.5.2 svn version just before the big boxes patch merge (long tested version)"
+	echo
+	echo "other :
 	echo "-h or -? display this help" 
 	echo "-diff or diff : creates the diff file 'dest.diff' (or 'svnhead.diff' when no dest filename is specified)"
 	echo "-d or clean : Deletes previous build files (not the execs)" 
-	echo "-r ##### : updates to old revision n°#####  (default : update to head)"
-	echo "-noup or -nomaj : dont update at all"
+	echo "-r ##### : updates to old revision n°#####  (default : update to head or to svn revision depending on the specified compiled svn version)"
+	echo "-noup or -nomaj : dont update sources at all"
 	echo
 	echo === INFOS ======================
 	svn info
