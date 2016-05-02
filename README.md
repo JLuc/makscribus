@@ -1,9 +1,14 @@
-Linux scripts which update, make and install bleeding-edge Scribus svn versions and provide various features.
-Current scripts are _maksvn_ and _makgit_.  
+Linux scripts which update, make, compiles and install bleeding-edge Scribus svn versions and provide various features.
+Current scripts is _maksvn_ ( since _makgit_ has not been maintened ).  
+
+#### Preliminary notice
+No bad issue has ever been reported so far with these scripts but they sure can be improved. 
+- The author or the scribus team are NOT responsible for your computer crash or data loss. 
+- Pull requests are wellcome !
 
 # maksvn
 
-Using Subversion: update to trunk svn head or to any other revision, and make scribus 1.5 or 1.5.1
+Using Subversion: update to trunk svn head or to any other revision, and make scribus 1.5.2 or 'preBoxes' version.
 
 Folders can be changed in editing the settings inside the file at its begining.
 - path to Qt
@@ -11,10 +16,9 @@ Folders can be changed in editing the settings inside the file at its begining.
 - etc
 
 #### Currently tested runs on:
-- [x] Ubuntu 14.04 (tested by JLuc, Dec 2015)
+- [x] Ubuntu 14.04 (tested by JLuc, Dec2016)
 - [x] Ubuntu 13.10 (tested by JLuc, Dec 2013)
 - [x] slackware 14.1 (tested by John Culleton, Dec 2015)
-
 
 #### Basic use
 
