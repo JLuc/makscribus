@@ -1,5 +1,7 @@
 Linux scripts which update, make, compiles and install bleeding-edge Scribus svn versions and provide various features.
-Current scripts is _maksvn_ ( since _makgit_ has not been maintened ).  
+Current script list is :
+- _maksvn_ 
+- _makgit_ (not maintened).  
 
 #### Preliminary notice
 No bad issue has ever been reported so far with these scripts but they sure can be improved. 
@@ -89,3 +91,4 @@ Other script :
 * required ? offer other linux 'flavor' options...(involves mostly fine-tuning library installs)
 * checkout and update plugin from github and compile ? (for ex https://github.com/aoloe/scribus-plugin-export-epub)
 
+Main repo : https://github.com/JLuc/makscribus/
