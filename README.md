@@ -4,6 +4,7 @@ Current scripts is _maksvn_ ( since _makgit_ has not been maintened ).
 #### Preliminary notice
 No bad issue has ever been reported so far with these scripts but they sure can be improved. 
 - The author or the scribus team are NOT responsible for your computer crash or data loss. 
+- Use this at your own risk.
 - Pull requests are wellcome !
 
 # maksvn
