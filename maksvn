@@ -11,7 +11,14 @@
 #
 # Author : JLuc, for Passerelle Eco - www.passerelleco.info
 # Licence : GPL
-#
+# Main repo : https://github.com/JLuc/makscribus/
+
+#### Preliminary notice
+# No bad issue has ever been reported so far with these scripts but they sure can be improved. 
+# - The author or the scribus team are NOT responsible for your computer crash or data loss. 
+# - Use this at your own risk.
+# - Pull requests are wellcome !
+
 
 # Set to user convenience
 sourcepath=~/dev/scribus
