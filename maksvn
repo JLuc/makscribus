@@ -3,7 +3,7 @@
 #
 # maksvn script creates folders for out of source build 
 # has command line options for really clean build, creating diffs and for svn update
-# has various inline options to EDIT to fit your environnement	
+# has various inline options to EDIT to fit your environnement
 #
 # Sourcepath, qt library and destination folders can be set to user conveninence
 # but sourcepath will later contain both the 'svn' subfolder and the 'build' subfolder
@@ -18,14 +18,14 @@
 # - The author or the scribus team are NOT responsible for your computer crash or data loss. 
 # - Use this at your own risk.
 # - Pull requests are wellcome !
-
+#
+# TODO : use crudini or some other tool to parse ini file for all document related settings
+#
 
 # Set to user convenience
 sourcepath=~/dev/scribus
 
 # EDIT to fit your Qt install
-# qtpath="/localbin/Qt5.4/5.4"
-# qtpath="/localbin/Qt5.5.0/5.5"
 qtpath="/localbin/Qt5.6.0/5.6"
 
 # Default could be execdirpath=~/bin 
@@ -33,8 +33,9 @@ qtpath="/localbin/Qt5.6.0/5.6"
 # EDIT to fit your exec folder
 execdirpath=/localbin
 
-# DONT Edit but keep synced : it must reflect the make process result. Probably depends on makefile.
-# Once was "scribus-1.5.0.svn" but changed to "scribus-1.5.0" when 1.5  release was approaching
+# DONT Edit but keep synced : it must reflect the make process result (probably depends on makefile)
+# Once was "scribus-1.5.0.svn" but changed to "scribus-1.5.0" when 1.5  release was approaching,
+# and later became scribus-1.5.2.svn
 makeexecname="scribus-1.5.2.svn"
 
 # EDIT to fit your langage
@@ -53,21 +54,22 @@ revision="" 					# for latest svn
 # EDIT Suffix for executable
 # for example : when suffix is 151svn, executable will be scribus151svn
 # first command line specifies nickname for release to compile and related suffix
-if [ "$1" = "1.5" ] || [ "$1" = "15" ] || [ "$1" = "-1.5" ] || [ "$1" = "-15" ]
+if [ "$1" = "1.5.2" ] || [ "$1" = "152" ] || [ "$1" = "-1.5.2" ] || [ "$1" = "-152" ]
 then
-# preset config for scribus 1.5 unstable final release
 	shift
-	suffix=15
-	makeexecname="scribus-1.5.0"
-	revision=20099
-else if [ "$1" = "boxes" ] || [ "$1" = "-boxes" ]
+	# preset config for scribus 1.5.2 release
+	suffix=152
+	makeexecname="scribus-1.5.2"
+	revision=21331
+else if [ "$1" = "ok" ] || [ "$1" = "-ok" ] || [ "$1" = "preboxes" ] || [ "$1" = "-preboxes" ]
 	then
 		shift
-		suffix=boxes
-		#revision = svn head
-	else 
+		# preset config for scribus 1.5.2svn r21106 preboxes release
 		suffix=ok
 		revision=21106
+	else
+		suffix=153svn
+		#revision = svn head
 	fi
 fi
 
@@ -85,21 +87,20 @@ qtfullpath=$qtpath/gcc_64
 if [ "$1" = "-?" ] || [ "$1" = "?" ] || [ "$1" = "-h" ] || [ "$1" = "h" ] || [ "$1" = "help" ] || [ "$1" = "-help" ]
 then
 	echo
-	echo "Usage : maksvn ([15] or [boxes] or nothing) [-h]or[-?] [diff [dest]] [-d]ou[clean] [-r #####] [-nomaj]"
-	echo === OPTIONS ==================== the options order is important
-	echo "compiled svn version :"
-	echo "with '15' : svn version for scribus 1.5.0 final unstable version is compiled"
-	echo "with 'boxes' option : WARNING svn fetches svn head including boxes patch toward CTL : UNTESTED VERSION"
-	echo "else : svn update the source and compile the latest 1.5.2 svn version just before the big boxes patch merge (long tested version)"
-	echo
-	echo "other :"
+	echo "Usage : maksvn ([152] or [ok] or [preboxes] or nothing) [-h]or[-?] [diff [dest]] [-d]ou[clean] [-r #####] [-nomaj]"
+	echo "=== OPTIONS ==================== the options order matters"
+	echo "=== Compiled svn version"
+	echo "with 'ok' or 'preboxes' : last version before 'boxes' patch is merged (well tested)"
+	echo "with '152' : scribus 1.5.2 is compiled (including 'boxes' patch, pdf-export is not thoroughfully tested)"
+	echo "without version option : svn fetches 1.5.3 svn head including experimental patches toward CTL (could include lot of new issues)"
+	echo "=== Other options"
 	echo "-h or -? display this help" 
 	echo "-diff or diff : creates the diff file 'dest.diff' (or 'svnhead.diff' when no dest filename is specified)"
 	echo "-d or clean : Deletes previous build files (not the execs)" 
 	echo "-r ##### : updates to old revision n°#####  (default : update to head or to svn revision depending on the specified compiled svn version)"
 	echo "-noup or -nomaj : dont update sources at all"
 	echo
-	echo === INFOS ======================
+	echo === SVN INFO ======================
 	svn info
 	exit
 fi
@@ -147,7 +148,7 @@ then
 		rm $dest
 	fi
 	svn diff -x -u -x -w -x -b > $dest
-	if [ -f $dest ]; 
+	if [ -f $dest ];
 	then
 		cat $dest
 		echo "===="
@@ -171,13 +172,10 @@ then
 	clean="-d"  
 	maketarget="clean"
 	echo
-	echo "Deleting the foregoing build objects." 
-	sudo rm -rf $sourcepath/build/$suffix/*
+	echo "Deleting the foregoing build objects $sourcepath/build/$suffix/*" 
+	rm -rf $sourcepath/build/$suffix/*
 	echo "$sourcepath/build/$suffix was emptied --- it now contains :"
 	ls $sourcepath/build/$suffix
-	echo
-# Dont delete precious previous execs
-#	sudo rm -rf $execdirpath/scribus$suffix/*
 	echo
 fi
 
@@ -224,6 +222,7 @@ cmake ../../svn $usercmakeopt -DCMAKE_INSTALL_PREFIX:PATH=$execdirpath/scribus$s
 
 echo sudo chown -R $USER:$USER $sourcepath/build/$suffix
 sudo chown -R $USER:$USER $sourcepath/build/$suffix
+
 # sudo chmod u+rwx /usr/local/src 
 
 echo
