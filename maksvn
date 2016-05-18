@@ -36,7 +36,7 @@ execdirpath=/localbin
 # DONT Edit but keep synced : it must reflect the make process result (probably depends on makefile)
 # Once was "scribus-1.5.0.svn" but changed to "scribus-1.5.0" when 1.5  release was approaching,
 # and later became scribus-1.5.2.svn
-makeexecname="scribus-1.5.2.svn"
+makeexecname="scribus-1.5.3.svn"
 
 # EDIT to fit your langage
 mylang="fr;en-us"
@@ -66,6 +66,7 @@ else if [ "$1" = "ok" ] || [ "$1" = "-ok" ] || [ "$1" = "preboxes" ] || [ "$1" =
 		shift
 		# preset config for scribus 1.5.2svn r21106 preboxes release
 		suffix=ok
+		makeexecname="scribus-1.5.2.svn"
 		revision=21106
 	else
 		suffix=153svn
