@@ -9,6 +9,15 @@ No bad issue has ever been reported so far with these scripts but they sure can 
 - Use this at your own risk.
 - Pull requests are wellcome !
 
+# prereqisites
+
+The dev version of all required libs has to be installed first
+
+this might possibily do it :
+``` 
+sudo apt install build-essential cmake gettext libboost-python-dev libcairo2-dev libcdr-dev libcups2-dev libfreehand-dev libgraphicsmagick++1-dev libharfbuzz-dev libhunspell-dev libhyphen-dev libicu-dev liblcms2-dev libmspub-dev libopenscenegraph-dev libpagemaker-dev libpodofo-dev libpoppler-cpp-de libpoppler-dev libpoppler-private-dev libqt5opengl5-dev libqt5webkit5-dev librevenge-dev libtiff-dev libvisio-dev libwpg-dev libxml2-dev python-all qtbase5-dev qttools5-dev qttools5-dev-tools zlib1g-de
+```
+
 # maksvn
 
 Using Subversion: update to trunk svn head or to any other revision, and make scribus 1.5.2 or 'preBoxes' version.
