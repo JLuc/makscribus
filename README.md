@@ -1,23 +1,18 @@
-Linux scripts which update, make, compiles and install bleeding-edge Scribus svn versions and provide various features.
-Current script list is :
-- _maksvn_ 
-- _makgit_ (not maintened).  
+maksvn is a linux script which update, make, compiles and install bleeding-edge Scribus svn versions and provide various features.
 
 #### Preliminary notice
-No bad issue has ever been reported so far with these scripts but they sure can be improved. 
-- The author or the scribus team are NOT responsible for your computer crash or data loss. 
-- Use this at your own risk.
-- Pull requests are wellcome !
+- The author or the scribus team are NOT responsible for your computer crash or data loss. Use this at your own risk.
+- Pull requests are wellcome
 
 #### prereqisites
 
 The dev version of all required libs has to be installed first
 
-This might possibily do it :
+Thanks ale for the list :
 ``` 
 sudo apt install build-essential cmake gettext libboost-python-dev libcairo2-dev libcdr-dev libcups2-dev libfreehand-dev libgraphicsmagick++1-dev libharfbuzz-dev libhunspell-dev libhyphen-dev libicu-dev liblcms2-dev libmspub-dev libopenscenegraph-dev libpagemaker-dev libpodofo-dev libpoppler-cpp-dev libpoppler-dev libpoppler-private-dev libqt5opengl5-dev libqt5webkit5-dev librevenge-dev libtiff-dev libvisio-dev libwpg-dev libxml2-dev python-all qtbase5-dev qttools5-dev qttools5-dev-tools zlib1g-dev
 ```
-(thanks ale)
+
 
 # maksvn
 
